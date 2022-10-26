@@ -21,6 +21,14 @@ body {
     height: auto;
   }
 
+.center {
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+  padding-top: 0px;
+  text-align: center;
+  justify-content: center;
+}
 
   .my-nav {
     background-color: #002677 !important;
