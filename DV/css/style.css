@@ -1,0 +1,28 @@
+body {
+    /*margin-left: auto;
+    margin-right: auto;*/
+    margin: 0;
+    padding: 0;
+  }
+  
+  .title {
+    font-family: "Roboto Slab";
+    color: #222222;
+
+  }
+  
+  .subtitle {
+    font-family: "Fira Sans";
+    font-size: 50%;
+  }
+
+  .img-logo{
+    width: 50;
+    height: auto;
+  }
+
+
+  .my-nav {
+    background-color: #002677 !important;
+
+  }
