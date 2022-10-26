@@ -1,0 +1,12 @@
+body {
+  text-align: center;
+}
+
+h1.title {
+  font-family: "Roboto Slab";
+  color: #222222;
+}
+
+p {
+  font-family: "Fira Sans";
+}
