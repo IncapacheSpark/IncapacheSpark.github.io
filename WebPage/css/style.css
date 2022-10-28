@@ -1,0 +1,91 @@
+html{
+    scroll-behavior: smooth;
+}
+
+body {
+    /*margin-left: auto;
+    margin-right: auto;*/
+    margin: 0;
+    padding: 1;
+  }
+  
+
+  .title {
+    font-family: "Roboto Slab";
+    color: #002677;
+
+  }
+  
+  .subtitle {
+    font-family: "Fira Sans";
+    /*font-size: 90%;*/
+    font-size: medium;
+   font-weight: lighter;
+   text-align: center;
+
+  }
+
+  .img-logo{
+    width: 50;
+    height: auto;
+  }
+
+  .img {
+    width: 50%;
+  }
+.center {
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+  padding-top: 0px;
+  text-align: center;
+  justify-content: center;
+}
+
+.background-color{
+    background-color: #002677 !important;
+}
+
+.margin-section {
+  padding-top: 1em;
+  margin-top: 1em;
+}
+
+.margin-title-section{
+  padding-top: 3em;
+  margin-top: 3em;
+}
+
+.footer-top-space{
+  margin-top: 3em;
+  padding-top: 1em;
+  padding-bottom: 1em ;
+}
+
+a {
+  color: white !important;
+}
+.colored_text {
+  color: white !important;
+}
+
+.panel-title{
+  margin-top: 20px !important;
+  margin-bottom: 20px !important;
+}
+
+.card-img-top{
+  width: 30%;
+  height: auto;
+}
+
+.card-col-margin{
+  margin-top: 2m;
+  margin-bottom: 3em;
+}
+/*
+.card {  
+  margin: ;   
+  display: inline-block;  
+  width: 100%;  
+}*/
