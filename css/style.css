@@ -6,7 +6,7 @@ body {
   /*margin-left: auto;
   margin-right: auto;*/
   margin: 0;
-  padding: 1;
+  padding: 1px;
 }
 
 .title {
@@ -75,7 +75,7 @@ body {
 }
 
 .card-col-margin{
-  margin-top: 2m;
+  margin-top: 2em;
   margin-bottom: 3em;
 }
 
@@ -89,4 +89,21 @@ body {
 }
 .icon-bar {
   background-color: white !important;
+}
+
+.tooltip {
+  position: absolute;
+  text-align: center;
+  contain: content;
+  width: auto;
+  height: auto;
+  padding: 2px;
+  font: 12px sans-serif;
+  border: 0;
+  border-radius: 8px;
+  pointer-events: none;
+}
+
+.breadcrumb-pos {
+  padding-top: 4em;
 }
