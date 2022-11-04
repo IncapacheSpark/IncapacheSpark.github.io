@@ -63,7 +63,7 @@
           .append("g")
           .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
-  d3.csv("../data/geo_data_trees_barchart.csv").then(function (data, num = 20) {
+  d3.csv("../../python/data/trees_data_barchart1.csv").then(function (data, num = 20) {
 
     // select only the n first rows from the csv
     var topN = data.slice(0, num).reverse()
