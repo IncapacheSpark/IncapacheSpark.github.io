@@ -38,7 +38,7 @@
 <nav class="breadcrumb-pos" aria-label="breadcrumb">
   <ol class="breadcrumb">
     <li class="breadcrumb-item"><a href="../../index.html">Home</a></li>
-    <li class="breadcrumb-item"><a href="../comparison.html">Assignment 1</a></li>
+    <li class="breadcrumb-item"><a href="../comparison.html">Charts comparison</a></li>
     <li class="breadcrumb-item active" aria-current="page">Barchart</li>
   </ol>
 </nav>
@@ -63,14 +63,14 @@
           .append("g")
           .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
-  d3.csv("../../python/data/trees_data_barchart1.csv").then(function (data, num = 20) {
+  d3.csv("../../python/data/geo_data_chart1.csv").then(function (data, num = 20) {
 
     // select only the n first rows from the csv
     var topN = data.slice(0, num).reverse()
 
     var others = data.slice(num, data.length)
 
-    let sumOthers = 0;
+    /*let sumOthers = 0;
 
     others.forEach(value => {
       sumOthers += Number(value.Count);
@@ -78,11 +78,11 @@
 
     console.log(sumOthers);
 
-    topN.push({'Name': 'Others', 'Count': sumOthers})
+    topN.push({'Name': 'Others', 'Count': sumOthers})*/
 
     // find the max value for X axis viz
     var max = Math.max.apply(Math, topN.map(function (value) {
-      return value.Count;
+      return value.count;
     }));
 
     // X axis
@@ -131,8 +131,8 @@
             .on("mouseover", function (event, d) {
               tooltip.transition()
                       .duration(200)
-                      .style("opacity", .9);
-              tooltip.html("<span class='tooltiptext'>" + "Aboundance: " + d.Count + "<br>" + "Average Canopy size: " + "</span>")
+                      .style("opacity", 1);
+              tooltip.html("<span class='tooltiptext'>" + "Aboundance: " + d.count + "<br>" + "Average Canopy size: " + d.Mean_canopy_size + "</span>")
                       .style("left", (event.pageX) + "px")
                       .style("top", (event.pageY - 28) + "px");
             })
@@ -147,7 +147,7 @@
             .transition()
             .duration(500)
             .attr("x", d => x(0))
-            .attr("width", d => x(d.Count))
+            .attr("width", d => x(d.count))
             .delay((d, i) => {
               return i * 100
             })
