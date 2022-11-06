@@ -60,7 +60,7 @@
     // set the dimensions and margins of the graph
     const margin = {top: 10, right: 20, bottom: 20, left: 180},
         width = 760 - margin.left - margin.right,
-        height = 600 - margin.top - margin.bottom;
+        height = 1100 - margin.top - margin.bottom;
 
     const svg = d3.select("#percentStackedChart")
         .append("svg")
@@ -87,7 +87,7 @@
 
         svg.append('g')
             .attr('transform', `translate(0,${height})`)
-            .call(d3.axisBottom(x))
+            //.call(d3.axisBottom(x))
 
         // Y axis
         const y = d3.scaleBand()
