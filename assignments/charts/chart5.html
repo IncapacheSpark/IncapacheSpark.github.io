@@ -48,6 +48,15 @@
    <div id="waffle1"></div>
    <div id="waffle2"></div>
    <div id="waffle3"></div>
+   <div id="waffle4"></div>
+   <div id="waffle5"></div>
+   <div id="waffle6"></div>
+   <div id="waffle7"></div>
+   <div id="waffle8"></div>
+   <div id="waffle9"></div>
+   <div id="waffle10"></div>
+   <div id="waffle11"></div>
+   <div id="waffle12"></div>
  <div id="legend"></div>
 </div> <!-- chiude container -->
 
@@ -62,14 +71,7 @@
 <script>
 
     var total = 0;
-    var width,
-        height,
-        widthSquares = 20,
-        heightSquares = 5,
-        squareSize = 25,
-        squareValue = 0,
-        gap = 1,
-        theData = [];
+
 
     var color = d3.scale.category10();
 
@@ -82,7 +84,17 @@
       //total = d3.sum(data, function(d) { return d.count; });
       k=0;
       data.forEach((f, i) => {
-        console.log(f);
+
+        var width,
+            height,
+            widthSquares = 20,
+            heightSquares = 5,
+            squareSize = 25,
+            squareValue = 0,
+            gap = 1,
+            theData = [];
+
+        //console.log(f);
         //total
         total = 0;
         for(i in TreeNames){
