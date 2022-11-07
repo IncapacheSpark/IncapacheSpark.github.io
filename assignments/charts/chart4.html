@@ -149,7 +149,7 @@
             .attr('x', d => x(d[0]))
             .attr('y', d => y(d.data.Neighbourhood))
             .attr('height', y.bandwidth())
-            .attr('width', d => (x(0)))
+            .attr('width', (x(0)))
             .attr("stroke", "grey")
             .on("mouseover", function (event, d) { // What happens when user hover a bar
 
