@@ -79,7 +79,7 @@
             "translate(" + margin.left + "," + margin.top + ")");
 
     // Parse the Data
-    d3.csv("../../python/data/circoscrizioni_top_trees.csv", function (data) {
+    d3.csv("https://raw.githubusercontent.com/IncapacheSpark/IncapacheSpark.github.io/main/python/data/circoscrizioni_top_trees.csv", function (data) {
 
         // List of subgroups = header of the csv files = soil condition here
         var tree_types = data.columns.slice(1);

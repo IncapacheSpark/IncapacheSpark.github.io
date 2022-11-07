@@ -70,7 +70,7 @@
         .attr("transform", `translate(${margin.left},${margin.top})`);
 
     // Parse the Data
-    d3.csv("../../python/data/circoscrizioni_top_trees.csv").then(function (data) {
+    d3.csv("https://raw.githubusercontent.com/IncapacheSpark/IncapacheSpark.github.io/main/python/data/circoscrizioni_top_trees.csv").then(function (data) {
 
         // List of subgroups = header of the csv files = plants
         const TreeNames = Object.keys(data[0]).filter(d => d !== "Neighbourhood");
