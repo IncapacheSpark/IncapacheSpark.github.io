@@ -70,18 +70,6 @@
     // select only the n first rows from the csv
     var topN = data.slice(0, num).reverse()
 
-    /*var others = data.slice(num, data.length)
-
-    let sumOthers = 0;
-
-    others.forEach(value => {
-      sumOthers += Number(value.Count);
-    });
-
-    console.log(sumOthers);
-
-    topN.push({'Name': 'Others', 'Count': sumOthers})*/
-
     // find the max value for X axis viz
     var max = Math.max.apply(Math, topN.map(function (value) {
       return value.count;
