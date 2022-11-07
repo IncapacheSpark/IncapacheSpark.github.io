@@ -44,7 +44,10 @@
 <div class="container center">
     <h1 class="title margin-title-section"> Waffle Chart</h1>
       <hr>
-   <div id="waffle"></div>
+   <div id="waffle0"></div>
+   <div id="waffle1"></div>
+   <div id="waffle2"></div>
+   <div id="waffle3"></div>
  <div id="legend"></div>
 </div> <!-- chiude container -->
 
@@ -56,136 +59,135 @@
 <script src="http://d3js.org/d3.v3.min.js"></script>
 
 <!-- Load d3.js -->
-
-
 <script>
 
-var total = 0;
-var width,
-    height,
-    widthSquares = 20,
-    heightSquares = 5,
-    squareSize = 25,
-    squareValue = 0,
-    gap = 1,
-    theData = [];
+    var total = 0;
+    var width,
+        height,
+        widthSquares = 20,
+        heightSquares = 5,
+        squareSize = 25,
+        squareValue = 0,
+        gap = 1,
+        theData = [];
 
-var color = d3.scale.category10();
+    var color = d3.scale.category10();
 
-  d3.csv("../../python/data/circoscrizioni_top_trees.csv", function (data) {
+    d3.csv("../../python/data/circoscrizioni_top_trees.csv", function(error, data)
+    {
 
+      const TreeNames = Object.keys(data[0]).filter(d => d !== "Neighbourhood");
+      const neighbourhoods = data.map(d => d.Neighbourhood);
 
-  const TreeNames = Object.keys(data[0]).filter(d => d !== "Neighbourhood");
-  // List of groups = species here = value of the first column called group -> I show them on the Y axis
-  const neighbourhoods = data.map(d => d.Neighbourhood);
+      //total = d3.sum(data, function(d) { return d.count; });
+      k=0;
+      data.forEach((f, i) => {
+        console.log(f);
+        //total
+        total = 0;
+        for(i in TreeNames){
+          name= TreeNames[i];
+          total += +f[name];
+        }
+        //value of a square
+        squareValue = total / (widthSquares*heightSquares);
 
-
-  data.forEach(function (d) {
-      // Compute the total
-      tot = 0
-      for (i in TreeNames) {
-          name = TreeNames[i];
-          tot += +d[name]
-      }
-
-      // Now normalize
-      // for (i in TreeNames) {
-      //     name = TreeNames[i];
-      //     d[name] = d[name] / tot * 100
-      // }
-  })
-
-  console.log(total);
-  //value of a square
-  squareValue = tot / (widthSquares*heightSquares);
-
-  //remap data
-  data.forEach(function(d, i)
-  {
-      d.population = +d.population;
-      d.units = Math.floor(d.population/squareValue);
-      theData = theData.concat(
-        Array(d.units+1).join(1).split('').map(function()
-          {
-            return {  squareValue:squareValue,
-                      units: d.units,
-                      population: d.population,
-                      groupIndex: i};
-          })
-        );
-  });
-
-  width = (squareSize*widthSquares) + widthSquares*gap + 25;
-  height = (squareSize*heightSquares) + heightSquares*gap + 25;
-
-  var waffle = d3.select("#waffle")
-      .append("svg")
-      .attr("width", width)
-      .attr("height", height)
-      .append("g")
-      .selectAll("div")
-      .data(theData)
-      .enter()
-      .append("rect")
-      .attr("width", squareSize)
-      .attr("height", squareSize)
-      .attr("fill", function(d)
-      {
-        return color(d.groupIndex);
-      })
-      .attr("x", function(d, i)
+        Object.keys(f).forEach(function(d, i)  //remap data
         {
-          //group n squares for column
-          col = Math.floor(i/heightSquares);
-          return (col*squareSize) + (col*gap);
-        })
-      .attr("y", function(d, i)
-      {
-        row = i%heightSquares;
-        return (heightSquares*squareSize) - ((row*squareSize) + (row*gap))
-      })
-      .append("title")
-        .text(function (d,i)
-          {
-            return "Age range: " + data[d.groupIndex].age + " | " +  d.population + " , " + d.units + "%"
+          if(d=="Neighbourhood"){return;}
+          //console.log(d);   //accedi nome albero
+          //console.log(f[d]);  //accedi count albero
+            f[d] = +f[d];
+            f.units = Math.floor(f[d]/squareValue);
+            theData = theData.concat(
+              Array(f.units+1).join(1).split('').map(function()
+                {
+                  return {  squareValue:squareValue,
+                            units: f.units,
+                            count: f[d],
+                            groupIndex: i,
+                            nameTree: d};
+                })
+              );
           });
 
-   //add legend with categorical data
-   var legend = d3.select("#legend")
-    .append("svg")
-    .attr('width', 300)
-    .attr('height', 200)
-    .append('g')
-    .selectAll("div")
-    .data(data)
-    .enter()
-      .append("g")
-      .attr('transform', function(d,i){ return "translate(0," + i*20 + ")";});
-  legend.append("rect")
-    .attr("width", 18)
-    .attr("height", 18)
-    .style("fill", function(d, i) { return color(i)});
-  legend.append("text")
-    .attr("x", 25)
-    .attr("y", 13)
-    .text( function(d) { return d.age});
+          console.log(theData);
+          width = (squareSize*widthSquares) + widthSquares*gap + 25;
+          height = (squareSize*heightSquares) + heightSquares*gap + 25;
 
-    //add value of a unit square
-    var legend2 = d3.select("#legend")
-      .select('svg')
-      .append('g')
-      .attr('transform', "translate(100,0)");
+          var waffle = d3.select("#waffle"+k)
+              .append("svg")
+              .attr("width", width)
+              .attr("height", height)
+              .append("g")
+              .selectAll("div")
+              .data(theData)
+              .enter()
+              .append("rect")
+              .attr("width", squareSize)
+              .attr("height", squareSize)
+              .attr("fill", function(f)
+              {
+                return color(f.groupIndex);
+              })
+              .attr("x", function(f, i)
+                {
+                  //group n squares for column
+                  col = Math.floor(i/heightSquares);
+                  return (col*squareSize) + (col*gap);
+                })
+              .attr("y", function(f, i)
+              {
+                row = i%heightSquares;
+                return (heightSquares*squareSize) - ((row*squareSize) + (row*gap))
+              })
+              .append("title")
+                .text(function (f,i)
+                  {
+                    return "tree_species range: " + f.nameTree + " | " +  f.count + " , " + f.units + "%"
+                  });
+        k+=1;
+      });
 
-legend2.append("text")
-        .attr('y', '14')
-        .attr('font-size', '18px')
-        .text("Total: " + total)
-        .attr("fill", "#444444");
-});
+
+
+
+/*
+
+       //add legend with categorical data
+       var legend = d3.select("#legend")
+        .append("svg")
+        .attr('width', 300)
+        .attr('height', 200)
+        .append('g')
+        .selectAll("div")
+        .data(data)
+        .enter()
+          .append("g")
+          .attr('transform', function(d,i){ return "translate(0," + i*20 + ")";});
+      legend.append("rect")
+        .attr("width", 18)
+        .attr("height", 18)
+        .style("fill", function(d, i) { return color(i)});
+      legend.append("text")
+        .attr("x", 25)
+        .attr("y", 13)
+        .text( function(d) { return d.tree_species});
+
+        //add value of a unit square
+        var legend2 = d3.select("#legend")
+          .select('svg')
+          .append('g')
+          .attr('transform', "translate(100,0)");
+
+    legend2.append("text")
+            .attr('y', '14')
+            .attr('font-size', '18px')
+            .text("Total: " + total)
+            .attr("fill", "#444444"); */
+    });
 
 </script>
-
-
 
 <footer class="text-center text-lg-start">
     <div class="footer-top-space text-center p-3 background-color colored_text">
