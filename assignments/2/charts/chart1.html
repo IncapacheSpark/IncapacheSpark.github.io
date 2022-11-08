@@ -47,8 +47,47 @@
   <h1 class="title margin-title-section"> Top 20 tree types in Trento</h1>
   <hr>
   <!-- Create a div where the graph will take place -->
-  <!--<div id="..."></div>-->
+  <div id="histogram"></div>
 </div>
+
+<script>
+  // set the dimensions and margins of the graph
+  const margin = {top: 10, right: 30, bottom: 30, left: 40},
+      width = 460 - margin.left - margin.right,
+      height = 400 - margin.top - margin.bottom;
+
+  // append the svg object to the body of the page
+  const svg = d3.select("histogram")
+    .append("svg")
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+      .attr("transform",
+            `translate(${margin.left}, ${margin.top})`);
+
+  // get the data
+  d3.csv("https://raw.githubusercontent.com/IncapacheSpark/IncapacheSpark.github.io/main/python/data/ass2.csv").then( function(data) {
+    console.log(data)
+    const treesHeight = data.map(d => d.Height);
+
+    console.log(treesHeight)
+
+    // X axis: scale and draw:
+    const x = d3.scaleLinear()
+      .domain([0, 1000])     // can use this instead of 1000 to have the max of data: d3.max(data, function(d) { return +d.price })
+      .range([0, width]);
+    
+      svg.append("g")
+      .attr("transform", `translate(0, ${height})`)
+      .call(d3.axisBottom(x));
+
+
+
+
+  });
+
+
+</script>
 
 
 
