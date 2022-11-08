@@ -105,4 +105,5 @@ body {
 .breadcrumb-pos {
   padding-top: 4em;
   position: fixed;
+  z-index: 1;
 }
