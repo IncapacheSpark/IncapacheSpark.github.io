@@ -6,10 +6,14 @@
   <!-- Load d3.js -->
   <script src="https://d3js.org/d3.v6.js"></script>
 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Sans&family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet">
+
   <link rel="stylesheet" href="/css/style.css">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" rel="stylesheet"
-        type='text/css'>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" rel="stylesheet" type='text/css'>
+
 
 </head>
 <body>
@@ -38,25 +42,104 @@
 <nav class="breadcrumb-pos" aria-label="breadcrumb">
   <ol class="breadcrumb">
     <li class="breadcrumb-item"><a href="/index.html">Home</a></li>
-    <li class="breadcrumb-item"><a href="../comparison.html">Assignment 2</a></li>
-    <li class="breadcrumb-item active" aria-current="page">Barchart</li>
+    <li class="breadcrumb-item"><a href="../distribution.html">Assignment 2</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Scatter Plot</li>
   </ol>
 </nav>
 
 <div class="container center">
-  <h1 class="title margin-title-section"> Top 20 tree types in Trento</h1>
+  <h1 class="title margin-title-section"> Scatter Plot</h1>
   <hr>
   <!-- Create a div where the graph will take place -->
-  <!--<div id="barchart"></div>-->
+  <div id="my_scatter_plot"></div>
 </div>
 
 
+<script>
 
-</body>
+// set the dimensions and margins of the graph
+const margin = {top: 10, right: 30, bottom: 30, left: 60},
+    width = 860 - margin.left - margin.right,
+    height = 700 - margin.top - margin.bottom;
+
+// append the svg object to the body of the page
+const svg = d3.select("#my_scatter_plot")
+  .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform",
+          `translate(${margin.left}, ${margin.top})`);
+
+//Read the data
+d3.csv("https://raw.githubusercontent.com/IncapacheSpark/IncapacheSpark.github.io/main/python/data/ass2.csv").then( function(data) {
+
+  // Add X axis
+  const x = d3.scaleLinear()
+    .domain([0, 35])
+    .range([ 0, width ]);
+  svg.append("g")
+    .attr("transform", `translate(0, ${height})`)
+    .call(d3.axisBottom(x));
+
+  // Add Y axis
+  const y = d3.scaleLinear()
+    .domain([0, 150])
+    .range([ height, 0]);
+  svg.append("g")
+    .call(d3.axisLeft(y));
+
+  // Color scale: give me a specie name, I return a color
+  const color = d3.scaleOrdinal()
+    .domain(["Celtis australis", "Aesculus hippocastanum", "Carpinus betulus", "Tilia cordata", "Platanus x hispanica", "Tilia x europaea"])
+    .range([ "#2E86AB", "#A23B72", "#F18F01", "C73E1D", "3B1F2B"])
+
+
+  // Highlight the specie that is hovered
+  const highlight = function(event,d){
+
+    selected_specie = d.Name
+
+    d3.selectAll(".dot")
+      .transition()
+      .duration(200)
+      .style("fill", "lightgrey")
+      .attr("r", 3)
+
+    d3.selectAll("." + selected_specie)
+      .transition()
+      .duration(200)
+      .style("fill", color(selected_specie))
+      .attr("r", 7)
+  }
+
+  // Highlight the specie that is hovered
+  const doNotHighlight = function(event,d){
+    d3.selectAll(".dot")
+      .transition()
+      .duration(200)
+      .style("fill", d => color(d.Name))
+      .attr("r", 5 )
+  }
+
+  // Add dots
+  svg.append('g')
+    .selectAll("dot")
+    .data(data)
+    .enter()
+    .append("circle")
+      .attr("class", function (d) { return "dot " + d.Name } )
+      .attr("cx", function (d) { return x(d.Height); } )
+      .attr("cy", function (d) { return y(d.CO2); } )
+      .attr("r", 5)
+      .style("fill", function (d) { return color(d.Name) } )
+    .on("mouseover", highlight)
+    .on("mouseleave", doNotHighlight )
+
+})
+</script>
 
 <!-- ################################# FOOTER #################################### -->
-
-
 <footer class="text-center text-lg-start">
   <div class="footer-top-space text-center p-3 background-color colored_text">
     © 2022 Copyright:
@@ -64,4 +147,6 @@
       Github</a>
   </div>
 </footer>
+
+</body>
 </html>
