@@ -1,14 +1,13 @@
 // set the dimensions and margins of the graph
-const margin = {top: 10, right: 20, bottom: 30, left: 180},
-    width = 760 - margin.left - margin.right,
-    height = 600 - margin.top - margin.bottom;
+const margin = {top: 40, right: 120, bottom: 120, left: 120},
+    width = 700 - margin.left - margin.right,
+    height = 620 - margin.top - margin.bottom;
 
 // append the svg object to the body of the page
 const svg = d3.select("#barchart")
     .append("svg")
-    .attr("preserveAspectRatio", "xMinYMin meet")
-    .attr("viewBox", `0 0 ${width + margin.left + margin.right} ${height + margin.top + margin.bottom}`)
-    .classed("svg-content", true)
+    .attr('width', width + margin.left + margin.right)
+    .attr('height', height + margin.top + margin.bottom)
     .append("g")
     .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
@@ -31,6 +30,13 @@ d3.csv("https://raw.githubusercontent.com/IncapacheSpark/IncapacheSpark.github.i
     svg.append('g')
         .attr('transform', `translate(0,${width})`)
         .call(d3.axisBottom(x))
+
+    // Add X axis label:
+    svg.append("text")
+        .attr("text-anchor", "end")
+        .attr("x", width)
+        .attr("y", height + 50)
+        .text("Abboundance");
 
     // Add Y axis
     const y = d3.scaleBand()
@@ -62,7 +68,7 @@ d3.csv("https://raw.githubusercontent.com/IncapacheSpark/IncapacheSpark.github.i
             tooltip.transition()
                 .duration(200)
                 .style("opacity", 1);
-            tooltip.html("<span class='tooltiptext'>" + "Aboundance: " + d.count + "<br>" + "Average Canopy size (m2): " + d.Mean_canopy_size + "</span>")
+            tooltip.html("<span class='tooltiptext'>" + "Aboundance: " + d.count + "<br>" + "Average Canopy Cover (m2): " + d.Mean_canopy_size + "</span>")
                 .style("left", (event.pageX) + "px")
                 .style("top", (event.pageY - 28) + "px");
         })

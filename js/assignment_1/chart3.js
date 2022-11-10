@@ -51,14 +51,9 @@ d3.csv("https://raw.githubusercontent.com/IncapacheSpark/IncapacheSpark.github.i
         .range(['#FD0100', '#F76915', '#EEDE04', '#A0D636', '#2FA236', '#929191']);
 
     // create a tooltip
-    var tooltip = d3.select("#stackedChart")
+    const tooltip = d3.select("#stackedChart")
         .append("div")
         .attr("class", "tooltip")
-        .style("background-color", "white")
-        .style("border", "solid")
-        .style("border-width", "1px")
-        .style("border-radius", "5px")
-        .style("padding", "10px")
 
     // ----------------
     // Highlight a specific subgroup when hovered

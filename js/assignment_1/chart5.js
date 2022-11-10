@@ -38,7 +38,7 @@ d3.csv("https://raw.githubusercontent.com/IncapacheSpark/IncapacheSpark.github.i
             //console.log(f[d]);  //accedi count albero
             f[d] = +f[d];
             // risolvere !!!!
-            f.units = Math.round(f[d] * 100 / total);
+            f.units = Math.round(f[d] / squareValue);
             theData = theData.concat(
                 Array(f.units + 1).join(1).split('').map(function () {
                     return {
@@ -51,6 +51,14 @@ d3.csv("https://raw.githubusercontent.com/IncapacheSpark/IncapacheSpark.github.i
                 })
             );
         });
+
+        if (theData.length < 100) {
+            for (let i=0; i<100-theData.length; i++) {
+                theData = theData.slice(0, 1).concat(theData)
+            }
+        }
+
+        theData = theData.slice(0,100)
 
         width = (squareSize * widthSquares) + widthSquares * gap + 25;
         height = (squareSize * heightSquares) + heightSquares * gap + 25;
