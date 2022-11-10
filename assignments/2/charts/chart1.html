@@ -38,49 +38,153 @@
 <nav class="breadcrumb-pos" aria-label="breadcrumb">
   <ol class="breadcrumb">
     <li class="breadcrumb-item"><a href="/index.html">Home</a></li>
-    <li class="breadcrumb-item"><a href="../comparison.html">Assignment 2</a></li>
+    <li class="breadcrumb-item"><a href="../distribution.html">Assignment 2</a></li>
     <li class="breadcrumb-item active" aria-current="page">Barchart</li>
   </ol>
 </nav>
 
 <div class="container center">
-  <h1 class="title margin-title-section"> Top 20 tree types in Trento</h1>
+  <h1 class="title margin-title-section">Height distribution of top-6 tree species</h1>
   <hr>
   <!-- Create a div where the graph will take place -->
   <div id="histogram"></div>
+
+  <p>
+    <label># bins</label>
+    <input type="number" min="1" max="40" step="1" value="10" id="nBin">
+  </p>
 </div>
 
 <script>
   // set the dimensions and margins of the graph
   const margin = {top: 10, right: 30, bottom: 30, left: 40},
-      width = 460 - margin.left - margin.right,
+      width = 500 - margin.left - margin.right,
       height = 400 - margin.top - margin.bottom;
 
   // append the svg object to the body of the page
-  const svg = d3.select("histogram")
+  const svg = d3.select("#histogram")
     .append("svg")
       .attr("width", width + margin.left + margin.right)
       .attr("height", height + margin.top + margin.bottom)
     .append("g")
-      .attr("transform",
-            `translate(${margin.left}, ${margin.top})`);
+      .attr("transform", `translate(${margin.left}, ${margin.top})`);
+
+
 
   // get the data
   d3.csv("https://raw.githubusercontent.com/IncapacheSpark/IncapacheSpark.github.io/main/python/data/ass2.csv").then( function(data) {
-    console.log(data)
-    const treesHeight = data.map(d => d.Height);
 
-    console.log(treesHeight)
-
+    const HeightCol = data.map(function(d) { return { Height: d.Height}});
+    
     // X axis: scale and draw:
     const x = d3.scaleLinear()
-      .domain([0, 1000])     // can use this instead of 1000 to have the max of data: d3.max(data, function(d) { return +d.price })
+      .domain([0, d3.max(HeightCol, function(d) { return +d.Height })])     
       .range([0, width]);
-    
-      svg.append("g")
+
+    svg.append("g")
       .attr("transform", `translate(0, ${height})`)
       .call(d3.axisBottom(x));
 
+      // Y axis: initialization
+    const y = d3.scaleLinear()
+        .range([height, 0]);
+
+    const yAxis = svg.append("g")
+
+    const tooltip = d3.select("#histogram")
+      .append("div")
+      .style("opacity", 0)
+      .attr("class", "tooltip")
+      .style("background-color", "black")
+      .style("color", "white")
+      .style("border-width", "1px")
+      .style("border-radius", "5px")
+      .style("padding", "3px")
+
+
+    const showTooltip = function(event,d) {
+      tooltip
+        .transition()
+        .duration(100)
+        .style("opacity", 1)
+      tooltip
+        .html("<span class='tooltiptext'>" + "Range: " + d.x0 + " - " + d.x1 + " m " + "<br>" + "Count: " + d.length + "</span>")
+        .style("left", (event.pageX) + "px")
+        .style("top", (event.pageY - 28) + "px");
+    }
+  
+  
+    const moveTooltip = function(event,d) {
+      tooltip
+      .style("left", (event.pageX) + "px")
+      .style("top", (event.pageY - 28) + "px");
+    }
+  
+  
+    const hideTooltip = function(event,d) {
+      tooltip
+        .transition()
+        .duration(100)
+        .style("opacity", 0)
+    }
+
+    
+
+    function update(nBin){
+
+      // set the parameters for the histogram
+      const histogram = d3.histogram()
+        .value(function(d) { return d.Height; })   // I need to give the vector of value
+        .domain(x.domain())  // then the domain of the graphic
+        .thresholds(x.ticks(nBin)); // then the numbers of bins
+
+      // And apply this function to data to get the bins
+      const bins = histogram(HeightCol);
+
+      console.log(bins)
+
+      y.domain([0, d3.max(bins, function(d) { return d.length; })])
+
+      yAxis.transition()
+        .duration(1000)
+        .call(d3.axisLeft(y));
+      
+
+      // Join the rect with the bins data
+      //const hist = svg.selectAll("rect")
+      var hist = svg.selectAll("rect")
+      .data(bins);
+
+      hist.join("rect")
+      .transition()
+      .duration(1000)
+      .attr("x", 1)
+      .attr("transform", function(d) { return `translate(${x(d.x0)}, ${y(d.length)})`})
+      .attr("width", function(d) { return x(d.x1) - x(d.x0) -1 ; })
+      .attr("height", function(d) { return height - y(d.length); })
+      .style("fill", "#69b3a2");
+
+      
+      // Show tooltip on hover
+      hist.on("mouseover", showTooltip )
+        .on("mousemove", moveTooltip )
+        .on("mouseleave", hideTooltip );
+      
+    }
+
+    
+
+    // Initialize with 10 bins
+    update(10)
+
+    // Listen to the button -> update if user change it
+    d3.select("#nBin").on("input", function() {
+      update(+this.value);
+    });
+
+    
+
+      
 
 
 
