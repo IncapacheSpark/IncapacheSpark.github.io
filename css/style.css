@@ -7,6 +7,7 @@ body {
     margin-right: auto;*/
     margin: 0;
     padding: 1px;
+    height:100%;
 }
 
 .title {
@@ -19,7 +20,7 @@ body {
     /*font-size: 90%;*/
     font-size: medium;
     font-weight: lighter;
-    text-align: center;
+
 }
 
 .font {
@@ -35,6 +36,9 @@ body {
     width: 50%;
 }
 
+.left{
+    text-align: left;
+}
 .center {
     margin-left: auto;
     margin-right: auto;
@@ -94,6 +98,10 @@ body {
     background-color: white !important;
 }
 
+.icon-logos{
+      font-size: xxx-large;
+      color: #002677;
+}
 .tooltip {
     position: absolute;
     text-align: center;
