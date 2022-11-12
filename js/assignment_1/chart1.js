@@ -37,7 +37,7 @@ d3.csv("https://raw.githubusercontent.com/IncapacheSpark/IncapacheSpark.github.i
         .attr("text-anchor", "end")
         .attr("x", width)
         .attr("y", height + 50)
-        .text("Abboundance");
+        .text("Aboundance");
 
     // Add Y axis
     const y = d3.scaleBand()
