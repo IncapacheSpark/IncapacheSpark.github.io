@@ -5,8 +5,9 @@ const margin = {top: 10, right: 20, bottom: 20, left: 180},
 
 const svg = d3.select("#percentStackedChart")
     .append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
+    .attr('width', '100%')
+    .attr('viewBox', '0 0 ' + (width + margin.left + margin.right) + ' ' + (height + margin.top + margin.bottom))
+    .attr("preserveAspectRatio", "xMinYMin meet")
     .append("g")
     .attr("transform", `translate(${margin.left},${margin.top})`);
 
