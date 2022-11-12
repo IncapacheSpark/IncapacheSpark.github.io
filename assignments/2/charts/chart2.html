@@ -1,16 +1,17 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <!-- Load d3.js -->
-    <script src="https://d3js.org/d3.v4.js"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <link rel="stylesheet" href="/css/style.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" rel="stylesheet"
-          type='text/css'>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Sans&family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet">
 
+  <link rel="stylesheet" href="/css/style.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" rel="stylesheet" type='text/css'>
+  <title>Box-Plot</title>
 </head>
 <body>
 
@@ -31,6 +32,7 @@
         </div>
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right"></ul>
         </div><!-- /.navbar-collapse -->
     </div>
 </nav>
@@ -39,35 +41,34 @@
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="/index.html">Home</a></li>
         <li class="breadcrumb-item"><a href="../distribution.html">Assignment 2</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Boxplot</li>
+        <li class="breadcrumb-item active" aria-current="page">Box-plot</li>
     </ol>
 </nav>
 
 <div class="container center">
     <h1 class="title margin-title-section"> Top 6 tree types distribution in Trento</h1>
     <hr>
-    <!-- Create a div where the graph will take place -->
-    <div id="boxplot1"></div>
-
-    <h1 class="title margin-title-section"> Top 6 tree types distribution in Trento</h1>
+    <h2 class="subtitle left">
+      In this page we represent the top 6 tree types distribution the using an interactive box plot. <br>
+      In descriptive statistics, a boxplot is a convenient way of graphically depicting groups of numerical data through their quartiles. A box plot displays median, higher/lower quartiles and maximum/minimum.
+      Outliers may be plotted as individual points. The spacings between the different parts of the box indicate the degree of dispersion (spread) and skewness in the data, and show outliers.
+    </h2>
     <hr>
-    <!-- Create a div where the graph will take place -->
-    <div id="boxplot2"></div>
+    <div id="boxplot1"></div>
 </div>
-
-<!-- Plugin for color scale -->
-<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
-
-<script src="/js/assignment_2/chart2.js"></script>
-
 
 <!-- ################################# FOOTER #################################### -->
 <footer class="text-center text-lg-start">
-    <div class="footer-top-space text-center p-3 background-color colored_text">
-        © 2022 Copyright:
-        <a class="text-dark colored_text" href="https://github.com/IncapacheSpark/IncapacheSpark.github.io">IncApacheSpark
-            Github</a>
-    </div>
+  <div class="footer-top-space text-center p-3 background-color colored_text">
+    © 2022 Copyright:
+    <a class="text-dark colored_text" href="https://github.com/IncapacheSpark/IncapacheSpark.github.io">IncApacheSpark Github</a>
+  </div>
 </footer>
+
+<script src="https://d3js.org/d3.v4.js"></script>
+<!-- Plugin for color scale -->
+<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+<script src="/js/assignment_2/chart2.js"></script>
+
 </body>
 </html>

@@ -6,14 +6,13 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Sans&family=Roboto+Slab:wght@400;700&display=swap"
-          rel="stylesheet"> <!-- Fira Sans & Roboto Slab fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Sans&family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet"> <!-- Fira Sans & Roboto Slab fonts -->
+
     <link rel="stylesheet" href="/css/style.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" rel="stylesheet"
-          type='text/css'>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" rel="stylesheet" type='text/css'>
 
-    <title>IncapacheSpark</title>
+    <title>Waffle Chart</title>
 </head>
 
 <body>
@@ -33,8 +32,13 @@
                 <img alt="Logo" src="/img/logo.svg" class="img-logo">
             </a>
         </div>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right"></ul>
+        </div><!-- /.navbar-collapse -->
     </div>
 </nav>
+
 <nav class="breadcrumb-pos" aria-label="breadcrumb">
     <ol class="breadcrumb font">
         <li class="breadcrumb-item"><a href="/index.html">Home</a></li>
@@ -44,7 +48,13 @@
 </nav>
 
 <div class="container center">
-    <h1 class="title margin-title-section"> Waffle Chart</h1>
+    <h1 class="title margin-title-section"> Tree categories for each neighbourhood</h1>
+    <hr>
+    <h2 class="subtitle left">
+      In this page we compare tree categories in a fixed-sized interactive waffle charts, for each neighbourhood.<br>
+      A waffle chart shows progress towards a target or a completion percentage. There is a grid of small cells, of which coloured cells represent the data.
+      We decided to represent the "Others" category with grey color in order to don't distract the user from the important ones.
+    </h2>
     <hr>
     <div id="waffles" class="waffles-pos">
         <div id="waffle0"></div>
