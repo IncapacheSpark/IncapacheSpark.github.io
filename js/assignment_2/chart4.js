@@ -1,6 +1,6 @@
 // set the dimensions and margins of the graph
 const margin = {top: 10, right: 20, bottom: 50, left: 40},
-    width = 400 - margin.left - margin.right,
+    width = 380 - margin.left - margin.right,
     height = 300 - margin.top - margin.bottom;
 
 //Read the data

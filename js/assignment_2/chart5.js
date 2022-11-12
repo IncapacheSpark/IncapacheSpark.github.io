@@ -1,7 +1,7 @@
 // set the dimensions and margins of the graph
-const margin = {top: 40, right: 100, bottom: 60, left: 20},
-    width = 700 - margin.left - margin.right,
-    height = 620 - margin.top - margin.bottom;
+const margin = {top: 40, right: 120, bottom: 60, left: 20},
+    width = 600 - margin.left - margin.right,
+    height = 420 - margin.top - margin.bottom;
 
 // append the svg object to the body of the page
 const svg = d3.select("#bubblePlot")
@@ -21,7 +21,7 @@ d3.csv("https://raw.githubusercontent.com/IncapacheSpark/IncapacheSpark.github.i
     // List of groups (here I have one group per column)
     const yItem = ["CO2", "Pollution"]
 
-    const zItem = Array.from(xItem)
+    const zItem = ["Canopy", "Crown_height", "Crown_width", "Height", "Leaf_area", "Leaf_biomass"]
 
     // add the options to the button
     d3.select("#selection-x")
@@ -120,7 +120,7 @@ d3.csv("https://raw.githubusercontent.com/IncapacheSpark/IncapacheSpark.github.i
             .duration(200)
         tooltip
             .style("opacity", 1)
-            .html("Canopy Cover (m2): " + d[selectedOptionX])
+            .html(selectedOptionX + ": " + d[selectedOptionX])
             .style("left", (event.pageX) + "px")
             .style("top", (event.pageY - 28) + "px")
     }
@@ -201,11 +201,6 @@ d3.csv("https://raw.githubusercontent.com/IncapacheSpark/IncapacheSpark.github.i
             .attr("y", -20)
             .text(yVal)
 
-        // Add a scale for bubble size
-        const z = d3.scaleSqrt()
-            .domain([0, 1000])
-            .range([2, 30]);
-
         // Add dots
         svg.append('g')
             .selectAll("dot")
@@ -216,7 +211,7 @@ d3.csv("https://raw.githubusercontent.com/IncapacheSpark/IncapacheSpark.github.i
             })
             .attr("cx", d => x(d[xVal]))
             .attr("cy", d => y(d[yVal]))
-            .attr("r", d => z(parseFloat(d[zVal])))
+            .attr("r", d => Math.sqrt((d[zVal]/Math.PI))) // r = sqrt(Area/pi)
             .style("fill", d => myColor(d.Name))
             // -3- Trigger the functions for hover
             .on("mouseover", showTooltip)
@@ -237,7 +232,7 @@ d3.csv("https://raw.githubusercontent.com/IncapacheSpark/IncapacheSpark.github.i
         svg.selectAll("myrect")
             .data(species)
             .join("circle")
-            .attr("cx", 490)
+            .attr("cx", 450)
             .attr("cy", (d, i) => 10 + i * (size + 5)) // 100 is where the first dot appears. 25 is the distance between dots
             .attr("r", 7)
             .style("fill", d => myColor(d))
@@ -249,12 +244,13 @@ d3.csv("https://raw.githubusercontent.com/IncapacheSpark/IncapacheSpark.github.i
             .data(species)
             .enter()
             .append("text")
-            .attr("x", 490 + size * .8)
+            .attr("x", 450 + size * .8)
             .attr("y", (d, i) => i * (size + 5) + (size / 2)) // 100 is where the first dot appears. 25 is the distance between dots
             .style("fill", d => myColor(d))
             .text(d => d)
             .attr("text-anchor", "left")
             .style("alignment-baseline", "middle")
+            .style("font-size", 10)
             .on("mouseover", highlight)
             .on("mouseleave", noHighlight)
     }

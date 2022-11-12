@@ -1,7 +1,7 @@
 // set the dimensions and margins of the graph
-const margin = {top: 40, right: 120, bottom: 120, left: 120},
+const margin = {top: 10, right: 120, bottom: 80, left: 120},
     width = 700 - margin.left - margin.right,
-    height = 620 - margin.top - margin.bottom;
+    height = 420 - margin.top - margin.bottom;
 
 // append the svg object to the body of the page
 const svg = d3.select("#barchart")
@@ -29,7 +29,7 @@ d3.csv("https://raw.githubusercontent.com/IncapacheSpark/IncapacheSpark.github.i
         .range([0, width]);
 
     svg.append('g')
-        .attr('transform', `translate(0,${width})`)
+        .attr('transform', `translate(0,${height})`)
         .call(d3.axisBottom(x))
 
     // Add X axis label:

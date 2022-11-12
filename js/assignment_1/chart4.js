@@ -1,7 +1,7 @@
 // set the dimensions and margins of the graph
-const margin = {top: 10, right: 20, bottom: 20, left: 180},
-    width = 760 - margin.left - margin.right,
-    height = 600 - margin.top - margin.bottom;
+const margin = {top: 10, right: 120, bottom: 80, left: 180},
+    width = 700 - margin.left - margin.right,
+    height = 420 - margin.top - margin.bottom;
 
 const svg = d3.select("#percentStackedChart")
     .append("svg")

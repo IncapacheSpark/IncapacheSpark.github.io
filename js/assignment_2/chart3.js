@@ -1,6 +1,6 @@
-const margin = {top: 40, right: 100, bottom: 60, left: 50},
+const margin = {top: 40, right: 100, bottom: 60, left: 30},
     width = 700 - margin.left - margin.right,
-    height = 620 - margin.top - margin.bottom;
+    height = 420 - margin.top - margin.bottom;
 
 // append the svg object to the body of the page
 let Svg = d3.select("#scatter")
