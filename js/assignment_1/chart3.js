@@ -100,7 +100,7 @@ d3.csv("https://raw.githubusercontent.com/IncapacheSpark/IncapacheSpark.github.i
                 .style("opacity", 1)
 
         })
-        .on("mouseleave", function (event, d) { // When user do not hover anymore
+        .on("mouseleave", function () { // When user do not hover anymore
 
             tooltip.transition()
                 .duration(200)

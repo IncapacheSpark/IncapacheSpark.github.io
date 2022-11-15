@@ -1,4 +1,4 @@
-var total = 0;
+let total = 0;
 
 const color = ['#FD0100', '#F76915', '#EEDE04', '#A0D636', '#2FA236', '#929191']
 
@@ -8,7 +8,7 @@ d3.csv("https://raw.githubusercontent.com/IncapacheSpark/IncapacheSpark.github.i
     const TreeNames = Object.keys(data[0]).filter(d => d !== "Neighbourhood");
 
     //total = d3.sum(data, function(d) { return d.count; });
-    k = 0;
+    let k = 0;
     data.forEach((f, i) => {
 
         let width,
@@ -137,38 +137,4 @@ d3.csv("https://raw.githubusercontent.com/IncapacheSpark/IncapacheSpark.github.i
             });
         k += 1;
     });
-
-    /*
-
-           //add legend with categorical data
-           var legend = d3.select("#legend")
-            .append("svg")
-            .attr('width', 300)
-            .attr('height', 200)
-            .append('g')
-            .selectAll("div")
-            .data(data)
-            .enter()
-              .append("g")
-              .attr('transform', function(d,i){ return "translate(0," + i*20 + ")";});
-          legend.append("rect")
-            .attr("width", 18)
-            .attr("height", 18)
-            .style("fill", function(d, i) { return color(i)});
-          legend.append("text")
-            .attr("x", 25)
-            .attr("y", 13)
-            .text( function(d) { return d.tree_species});
-
-            //add value of a unit square
-            var legend2 = d3.select("#legend")
-              .select('svg')
-              .append('g')
-              .attr('transform', "translate(100,0)");
-
-        legend2.append("text")
-                .attr('y', '14')
-                .attr('font-size', '18px')
-                .text("Total: " + total)
-                .attr("fill", "#444444"); */
 });
