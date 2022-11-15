@@ -47,7 +47,7 @@ d3.csv("https://raw.githubusercontent.com/IncapacheSpark/IncapacheSpark.github.i
         .attr("text-anchor", "end")
         .attr("x", -30)
         .attr("y", -20)
-        .text("Frequency")
+        .text("Count")
         .attr("text-anchor", "start")
 
     // create a tooltip
@@ -64,7 +64,7 @@ d3.csv("https://raw.githubusercontent.com/IncapacheSpark/IncapacheSpark.github.i
             .style("opacity", 1)
 
         tooltip
-            .html("Range (m): " + d.x0 + " - " + d.x1 + "<br>" + "Frequency: " + d.length)
+            .html("Range (m): " + d.x0 + " - " + d.x1 + "<br>" + "Count: " + d.length)
             .style("left", (event.pageX) + "px")
             .style("top", (event.pageY - 28) + "px")
     }
@@ -82,7 +82,7 @@ d3.csv("https://raw.githubusercontent.com/IncapacheSpark/IncapacheSpark.github.i
     }
 
     // A function that builds the graph for a specific value of bin
-    function update(nBin) {
+    
 
         // set the parameters for the histogram
         const histogram = d3.histogram()
@@ -90,7 +90,7 @@ d3.csv("https://raw.githubusercontent.com/IncapacheSpark/IncapacheSpark.github.i
                 return parseFloat(d.Height);
             })   // I need to give the vector of value
             .domain(x.domain())  // then the domain of the graphic
-            .thresholds(x.ticks(nBin)); // then the numbers of bins
+            .thresholds(x.ticks(20)); // then the numbers of bins
 
         // And apply this function to data to get the bins
         const bins = histogram(data);
@@ -105,38 +105,21 @@ d3.csv("https://raw.githubusercontent.com/IncapacheSpark/IncapacheSpark.github.i
             .call(d3.axisLeft(y));
 
         // Join the rect with the bins data
-        const bars = svg.selectAll("rect")
-            .data(bins)
-            // Show tooltip on hover
-            .on("mouseover", showTooltip)
-            .on("mousemove", moveTooltip)
-            .on("mouseleave", hideTooltip)
+        svg.selectAll("rect")
+      .data(bins)
+      .enter()
+      .append("rect")
+        .attr("x", 1)
+        .attr("transform", function(d) { return "translate(" + x(d.x0) + "," + y(d.length) + ")"; })
+        .attr("width", function(d) { return x(d.x1) - x(d.x0) -1 ; })
+        .attr("height", function(d) { return height - y(d.length); })
+        .style("fill", "#ea9b07")
+        // Show tooltip on hover
+        .on("mouseover", showTooltip )
+        .on("mousemove", moveTooltip )
+        .on("mouseleave", hideTooltip )
+    
 
-        // Manage the existing bars and eventually the new ones:
-        bars
-            .join("rect") // Add a new rect for each new elements
-            .transition() // and apply changes to all of them
-            .duration(1000)
-            .attr("x", 1)
-            .attr("transform", function (d) {
-                return `translate(${x(d.x0)}, ${y(d.length)})`
-            })
-            .attr("width", function (d) {
-                return x(d.x1) - x(d.x0) - 1;
-            })
-            .attr("height", function (d) {
-                return height - y(d.length);
-            })
-            .attr("fill", "#ea9b07")
-    }
-
-    // Initialize with 20 bins
-    update(20)
-
-    // Listen to the button -> update if user change it
-    d3.select("#nBin").on("input", function () {
-        update(+this.value);
-    });
-
+    
 
 });
