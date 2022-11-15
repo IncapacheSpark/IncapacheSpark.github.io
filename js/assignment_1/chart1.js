@@ -1,5 +1,5 @@
 // set the dimensions and margins of the graph
-const margin = {top: 10, right: 120, bottom: 80, left: 120},
+const margin = {top: 20, right: 120, bottom: 80, left: 120},
     width = 700 - margin.left - margin.right,
     height = 420 - margin.top - margin.bottom;
 
@@ -48,35 +48,58 @@ d3.csv("https://raw.githubusercontent.com/IncapacheSpark/IncapacheSpark.github.i
     svg.append("g")
         .call(d3.axisLeft(y));
 
+    // Add Y axis label:
+    svg.append("text")
+        .attr("text-anchor", "start")
+        .attr("x", -80)
+        .attr("y", -5)
+        .text("Tree type")
+
     // create a tooltip
     const tooltip = d3.select("#barchart")
         .append("div")
         .attr("class", "tooltip")
 
-
     // Bars
     svg.selectAll("mybar")
         .data(topN)
         .join("rect")
+        .attr("class", d => "myRect " + d.Name.replaceAll(' ', '_'))
         .attr("y", d => y(d.Name))
         .attr("height", y.bandwidth())
         .attr("fill", "#ea9b07")
+        .style("opacity", 0.8)
         // no bar at the beginning thus:
         .attr("width", x(0)) // always equal to 0
         .attr("x", x(0))
         // Three function that change the tooltip
         .on("mouseover", function (event, d) {
+
+            const groupName = d3.select(this)._groups[0][0].className.baseVal.slice(7)
+
+            // Highlight all rects of this subgroup with opacity 1.
+            // It is possible to select them since they have a specific class = their name.
+            d3.selectAll("." + groupName.replaceAll(' ', '_'))
+                .style("opacity", 1)
+
             tooltip.transition()
                 .duration(200)
                 .style("opacity", 1);
+
             tooltip.html("<span class='tooltiptext'>" + "Aboundance: " + d.count + "<br>" + "Average Canopy Cover (m2): " + d.Mean_canopy_size + "</span>")
                 .style("left", (event.pageX) + "px")
                 .style("top", (event.pageY - 28) + "px");
         })
         .on("mouseout", function () {
+
+            const groupName = d3.select(this)._groups[0][0].className.baseVal.slice(7)
+
             tooltip.transition()
-                .duration(500)
+                .duration(200)
                 .style("opacity", 0);
+
+            d3.selectAll("." + groupName.replaceAll(' ', '_'))
+                .style("opacity", 0.8)
         });
 
     // Animation
