@@ -1,5 +1,5 @@
 // set the dimensions and margins of the graph
-const margin = {top: 10, right: 20, bottom: 50, left: 40},
+const margin = {top: 10, right: 30, bottom: 50, left: 40},
     width = 380 - margin.left - margin.right,
     height = 300 - margin.top - margin.bottom;
 
@@ -149,8 +149,21 @@ d3.csv("https://raw.githubusercontent.com/IncapacheSpark/IncapacheSpark.github.i
 
             const gGrid = svg.append("g");
 
-            const gDot = svg.append('g')
-                .selectAll("dot")
+            // Add a clipPath: everything out of this area won't be drawn.
+            const clip = svg.append("defs").append("svg:clipPath")
+                .attr("id", "clip")
+                .append("svg:rect")
+                .attr("width", width)
+                .attr("height", height)
+                .attr("x", 0)
+                .attr("y", 0);
+
+            // Create the scatter variable: where both the circles and the brush take place
+            const scatter = svg.append('g')
+                .attr("clip-path", "url(#clip)")
+
+            scatter
+                .selectAll("circle")
                 .data(data.filter(d => d.Name === tree))
                 .join("circle")
                 .attr("cx", function (d) {
@@ -159,14 +172,9 @@ d3.csv("https://raw.githubusercontent.com/IncapacheSpark/IncapacheSpark.github.i
                 .attr("cy", function (d) {
                     return y(d[yVal]);
                 })
-                .attr("r", 1.5)
                 .style("fill", function (d) {
                     return color(d.Name)
                 })
-
-            gDot.selectAll("path")
-                .join("path")
-                .attr("d", d => `M${x(d[xVal])},${y(d[yVal])}h0`)
 
             const gx = svg.append("g");
 
@@ -177,23 +185,34 @@ d3.csv("https://raw.githubusercontent.com/IncapacheSpark/IncapacheSpark.github.i
                 const zx = transform.rescaleX(x).interpolate(d3.interpolateRound);
                 const zy = transform.rescaleY(y).interpolate(d3.interpolateRound);
 
-                gDot.attr("transform", transform).attr("r", 2 / transform.k);
                 gx.call(xAxis, zx);
                 gy.call(yAxis, zy);
                 gGrid.call(grid, zx, zy);
+
+                // update circle position
+                scatter
+                    .selectAll("circle")
+                    .attr("transform", transform).attr("r", 3 / transform.k);
             }
 
             const zoom = d3.zoom()
-                .scaleExtent([1, 5])
+                .scaleExtent([.5, 20])  // This control how much you can unzoom (x0.5) and zoom (x20)
+                .extent([[0, 0], [width, height]])
                 .on("zoom", zoomed);
 
-            d3.selectAll("." + tree.replaceAll(' ', '_'))
+            // This add an invisible rect on top of the chart area. This rect can recover pointer events: necessary to understand when the user zoom
+            svg.append("rect")
+                .attr("width", width)
+                .attr("height", height)
+                .style("fill", "none")
+                .style("pointer-events", "all")
                 .call(zoom)
                 .call(zoom.transform, d3.zoomIdentity);
+
         });
     }
 
-     display("Height", "CO2")
+    display("Height", "CO2")
 
     // When the button is changed, run the updateChart function
     d3.select("#selection-x").on("change", function (event, d) {
