@@ -58,6 +58,10 @@ d3.csv("https://raw.githubusercontent.com/IncapacheSpark/IncapacheSpark.github.i
     // A function that change this tooltip when the user hover a point.
     // Its opacity is set to 1: we can now see it. Plus it set the text and position of tooltip depending on the datapoint (d)
     const showTooltip = function (event, d) {
+
+        const groupName = d3.select(this)._groups[0][0]
+        console.log(groupName)
+
         tooltip
             .transition()
             .duration(100)
@@ -68,58 +72,59 @@ d3.csv("https://raw.githubusercontent.com/IncapacheSpark/IncapacheSpark.github.i
             .style("left", (event.pageX) + "px")
             .style("top", (event.pageY - 28) + "px")
     }
-    const moveTooltip = function (event, d) {
+    const moveTooltip = function (event) {
         tooltip
             .style("left", (event.pageX) + "px")
             .style("top", (event.pageY - 28) + "px")
     }
     // A function that change this tooltip when the leaves a point: just need to set opacity to 0 again
-    const hideTooltip = function (event, d) {
+    const hideTooltip = function () {
         tooltip
             .transition()
             .duration(100)
             .style("opacity", 0)
     }
 
-    // A function that builds the graph for a specific value of bin
-    
+    // set the parameters for the histogram
+    const histogram = d3.histogram()
+        .value(function (d) {
+            return parseFloat(d.Height);
+        })   // I need to give the vector of value
+        .domain(x.domain())  // then the domain of the graphic
+        .thresholds(x.ticks(20)); // then the numbers of bins
 
-        // set the parameters for the histogram
-        const histogram = d3.histogram()
-            .value(function (d) {
-                return parseFloat(d.Height);
-            })   // I need to give the vector of value
-            .domain(x.domain())  // then the domain of the graphic
-            .thresholds(x.ticks(20)); // then the numbers of bins
+    // And apply this function to data to get the bins
+    const bins = histogram(data);
 
-        // And apply this function to data to get the bins
-        const bins = histogram(data);
+    // Y axis: update now that we know the domain
+    y.domain([0, d3.max(bins, function (d) {
+        return d.length;
+    })]);   // d3.hist has to be called before the Y axis obviously
+    yAxis
+        .transition()
+        .duration(1000)
+        .call(d3.axisLeft(y));
 
-        // Y axis: update now that we know the domain
-        y.domain([0, d3.max(bins, function (d) {
-            return d.length;
-        })]);   // d3.hist has to be called before the Y axis obviously
-        yAxis
-            .transition()
-            .duration(1000)
-            .call(d3.axisLeft(y));
-
-        // Join the rect with the bins data
-        svg.selectAll("rect")
-      .data(bins)
-      .enter()
-      .append("rect")
+    // Join the rect with the bins data
+    svg.selectAll("rect")
+        .data(bins)
+        .enter()
+        .append("rect")
         .attr("x", 1)
-        .attr("transform", function(d) { return "translate(" + x(d.x0) + "," + y(d.length) + ")"; })
-        .attr("width", function(d) { return x(d.x1) - x(d.x0) -1 ; })
-        .attr("height", function(d) { return height - y(d.length); })
+        .attr("transform", function (d) {
+            return "translate(" + x(d.x0) + "," + y(d.length) + ")";
+        })
+        .attr("width", function (d) {
+            return x(d.x1) - x(d.x0) - 1;
+        })
+        .attr("height", function (d) {
+            return height - y(d.length);
+        })
         .style("fill", "#ea9b07")
         // Show tooltip on hover
-        .on("mouseover", showTooltip )
-        .on("mousemove", moveTooltip )
-        .on("mouseleave", hideTooltip )
-    
+        .on("mouseover", showTooltip)
+        .on("mousemove", moveTooltip)
+        .on("mouseleave", hideTooltip)
 
-    
 
 });
