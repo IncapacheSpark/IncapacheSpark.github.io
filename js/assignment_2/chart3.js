@@ -64,7 +64,7 @@ d3.csv("https://raw.githubusercontent.com/IncapacheSpark/IncapacheSpark.github.i
         const xAxis = Svg.append("g")
             .attr("class", "myXaxis")   // Note that here we give a class to the X axis, to be able to call it later and modify it
             .attr("transform", "translate(0," + height + ")")
-            .call(d3.axisBottom(x))
+            .call(d3.axisBottom(x).tickFormat(d3.format(".2s")))
             .attr("opacity", "0")
 
         // Add X axis label:
@@ -83,8 +83,9 @@ d3.csv("https://raw.githubusercontent.com/IncapacheSpark/IncapacheSpark.github.i
         const y = d3.scaleLinear()
             .domain([0, maxAxisY])
             .range([height, 0]).nice();
+
         Svg.append("g")
-            .call(d3.axisLeft(y));
+            .call(d3.axisLeft(y).tickFormat(d3.format(".2s")));
 
         // Add Y axis label:
         Svg.append("text")
