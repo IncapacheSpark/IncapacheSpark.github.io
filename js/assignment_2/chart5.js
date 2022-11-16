@@ -1,5 +1,5 @@
 // set the dimensions and margins of the graph
-const margin = {top: 40, right: 120, bottom: 60, left: 20},
+const margin = {top: 40, right: 120, bottom: 60, left: 40},
     width = 600 - margin.left - margin.right,
     height = 420 - margin.top - margin.bottom;
 
@@ -172,7 +172,7 @@ d3.csv("https://raw.githubusercontent.com/IncapacheSpark/IncapacheSpark.github.i
             .range([0, width]).nice();
         svg.append("g")
             .attr("transform", `translate(0, ${height})`)
-            .call(d3.axisBottom(x).ticks(3));
+            .call(d3.axisBottom(x).tickFormat(d3.format(".2s")));
 
         // Add X axis label:
         svg.append("text")
@@ -183,7 +183,7 @@ d3.csv("https://raw.githubusercontent.com/IncapacheSpark/IncapacheSpark.github.i
 
         // find the max value for X axis viz
         const maxAxisY = Math.max.apply(Math, data.map(function (value) {
-            return value[yVal];
+            return +value[yVal];
         }));
 
         // Add Y axis
@@ -192,11 +192,11 @@ d3.csv("https://raw.githubusercontent.com/IncapacheSpark/IncapacheSpark.github.i
             .range([height, 0]).nice();
 
         svg.append("g")
-            .call(d3.axisLeft(y));
+            .call(d3.axisLeft(y).tickFormat(d3.format(".2s")));
 
         // Add Y axis label:
         svg.append("text")
-            .attr("text-anchor", "start")
+            .attr("text-anchor", "middle")
             .attr("x", 0)
             .attr("y", -20)
             .text(yVal)
