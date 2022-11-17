@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="/css/style.css">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" rel="stylesheet" type='text/css'>
-  <title>Scatter-Plot</title>
+  <title>Choropleth map</title>
 </head>
 <body>
 
@@ -38,37 +38,25 @@
 </nav>
 
 <nav class="breadcrumb-pos" aria-label="breadcrumb">
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="/index.html">Home</a></li>
-        <li class="breadcrumb-item"><a href="../distribution.html">Assignment 2</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Scatter Plot</li>
-    </ol>
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/index.html">Home</a></li>
+    <li class="breadcrumb-item"><a href="../distribution.html">Assignment 3</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Choropleth map (1)</li>
+  </ol>
 </nav>
 
 <div class="container center">
-    <h1 class="title margin-title-section"> CO2 absorption compared with Tree size.</h1>
-    <hr>
-    <h2 class="subtitle left">
-
-        Starting from the intuition that trees of bigger size should help the environment more, we created an interactive chart that sorts trees according to diverse size metrics and makes it possible to view how much they help they environment by absorption of CO2 and attenuation of urban pollution. The x-axis hosts the size metrics (height, canopy size, leaf biomass etc) while the y-axis hosts the envornmental metrics (CO2 absorbed by the tree or pollution attenuation).<br>
-        The user can interact with plot by picking the tree size metrics for the x-axis and by picking the environmental variable for the y-axis.<br>
-        This kind of visualization is named scatter plot and displays a collection of points, each having the value of one variable determining the position on the horizontal axis and the value of the other variable determining the position on the vertical axis.<br>
-        
-    </h2>
-    <hr>
-    <p>
-        Select the parameters you want to visualize:
-        xAxis =
-        <select id="selection-x" name="xAxis"></select>
-        yAxis =
-        <select id="selection-y" name="yAxis"></select>
-    </p>
-    <br><br>
-    <div id="scatter" class="font svg-container"></div>
+  <h1 class="title margin-title-section">#Todo Height distribution of top-6 tree specie</h1>
+  <hr>
+  <h2 class="subtitle left">
+    #Todo In this page we represent the height distribution of top-6 tree species using an interactive histogram. <br>
+  </h2>
+  <hr>
+  <div id="histogram" class="font svg-container"></div>
 </div>
 
-
 <!-- ################################# FOOTER #################################### -->
+
 <footer class="text-center text-lg-start">
   <div class="footer-top-space text-center p-3 background-color colored_text">
     © 2022 Copyright:
@@ -76,8 +64,9 @@
   </div>
 </footer>
 
+<!-- Load d3.js -->
 <script src="https://d3js.org/d3.v6.js"></script>
-<script src="/js/assignment_2/chart3.js"></script>
-
+<script src="/js/assignment_3/chart1.js"></script>
 </body>
+
 </html>
