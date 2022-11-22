@@ -1,22 +1,29 @@
-const svg = d3.select("svg"),
-    width = +svg.attr("width"),
-    height = +svg.attr("height");
+var width = 800;
+var height = 400;
+trento_center = [11.1207,46.0664]
 
-// Map and projection
-const projection = d3.geoNaturalEarth1()
-    .scale(width / 1.3 / Math.PI)
-    .translate([width / 2, height / 2])
+var canvas = d3.select("#choroplet_map").append("svg")
+    .attr("width", width)
+    .attr("height", height)
 
-// Load external data and boot
-d3.json("https://raw.githubusercontent.com/IncapacheSpark/IncapacheSpark.github.io/main/python/data/circoscrizioni.geojson").then( function(data) {
 
-    // Draw the map
-    svg.append("g")
-        .selectAll("path")
-        .data(data.features)
-        .join("path")
-            .attr("fill", "#69b3a2")
-            .attr("d", d3.geoPath().projection(projection))
-            .style("stroke", "#fff")
+d3.json("/python/data/circoscrizioni.json", function(data) {
 
-})
+    var group = canvas.selectAll("g")
+        .data(data.features)  //array in geojson heißt "features"
+        .enter()
+        .append("g")
+    var projection = d3.geo.mercator()
+        .scale(90000)
+        .center(trento_center)  // centers map at given coordinates
+        .translate([width / 2, height / 2]); // translate map to svg
+
+    var path = d3.geo.path().projection(projection); //hand projection to projection generator --> how to translate coordinate to pixels
+
+
+    var areas = group.append("path")              //append to path to each "g" element
+        .attr("d", path)                              //data comes from path generator
+        .attr("class", "area") 
+        .attr("fill", "steelblue");
+         
+});
