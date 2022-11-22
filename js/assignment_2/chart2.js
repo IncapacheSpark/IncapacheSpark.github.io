@@ -170,7 +170,7 @@ d3.csv("https://raw.githubusercontent.com/IncapacheSpark/IncapacheSpark.github.i
         })
         .attr("height", y.bandwidth())
         .attr("stroke", "black")
-        .style("fill", "#69b3a2")
+        .style("fill", "#FFCA3A")
         .style("opacity", 1)
         .on("mouseover", mouseover)
         .on("mousemove", mousemove)

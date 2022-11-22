@@ -23,7 +23,7 @@ d3.json("/python/data/circoscrizioni.json", function(data) {
 
     var areas = group.append("path")              //append to path to each "g" element
         .attr("d", path)                              //data comes from path generator
-        .attr("class", "area") 
-        .attr("fill", "steelblue");
-         
+        .attr("class", "area")
+        .attr("fill", "#8AC926");
+
 });
