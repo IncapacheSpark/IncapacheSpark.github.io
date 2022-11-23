@@ -100,7 +100,7 @@ d3.csv("https://raw.githubusercontent.com/IncapacheSpark/IncapacheSpark.github.i
     // Color scale: give me a specie name, I return a color
     const myColor = d3.scaleOrdinal()
         .domain(["Celtis australis", "Aesculus hippocastanum", "Carpinus betulus", "Tilia cordata", "Platanus x hispanica", "Tilia x europaea"])
-        .range(["#2E86AB", "#A23B72", "#F18F01", "#C73E1D", "#3B1F2B", "#2EDA12FF"])
+        .range(['#ff595e', '#ffca3a', '#8ac926', '#1982c4', '#6a4c93', '#023047']);
 
 
     // ---------------------------//

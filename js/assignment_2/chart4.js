@@ -56,7 +56,7 @@ d3.csv("https://raw.githubusercontent.com/IncapacheSpark/IncapacheSpark.github.i
     // Color scale: give me a specie name, I return a color
     const color = d3.scaleOrdinal()
         .domain(["Celtis_australis", "Aesculus_hippocastanum", "Carpinus_betulus", "Tilia_cordata", "Platanus_x_hispanica", "Tilia_x_europaea"])
-        .range(["#2E86AB", "#A23B72", "#F18F01", "#C73E1D", "#3B1F2B", "#2EDA12FF"])
+        .range(['#ff595e', '#ffca3a', '#8ac926', '#1982c4', '#6a4c93', '#023047']);
 
     const grid = (g, x, y) => g
         .attr("stroke", "currentColor")
@@ -82,12 +82,12 @@ d3.csv("https://raw.githubusercontent.com/IncapacheSpark/IncapacheSpark.github.i
             .attr("y1", d => 0.5 + y(d))
             .attr("y2", d => 0.5 + y(d)));
 
-    xAxis = (g, x) => g
+    let xAxis = (g, x) => g
         .attr("transform", `translate(0,${height})`)
         .call(d3.axisBottom(x).ticks(12))
     // .call(g => g.select(".domain").attr("display", "none"))
 
-    yAxis = (g, y) => g
+    let yAxis = (g, y) => g
         .call(d3.axisLeft(y).ticks(12 * k))
     // .call(g => g.select(".domain").attr("display", "none"))
 
@@ -126,7 +126,16 @@ d3.csv("https://raw.githubusercontent.com/IncapacheSpark/IncapacheSpark.github.i
                 .attr("height", height + margin.top * 2 + margin.bottom)
                 .append("g")
                 .attr("transform",
-                    "translate(" + margin.left + "," + margin.top * 3 + ")");
+                    "translate(" + margin.left + "," + margin.top * 3 + ")")
+                .on("click", reset);
+
+            function reset() {
+                svg.transition().duration(750).call(
+                    zoom.transform,
+                    d3.zoomIdentity,
+                    d3.zoomTransform(svg.node()).invert([width / 2, height / 2])
+                );
+            }
 
             svg.append("text")
                 .attr("transform", "translate(" + (width / 2) + " ," + (-margin.top) + ")")
