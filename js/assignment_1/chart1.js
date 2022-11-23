@@ -67,7 +67,7 @@ d3.csv("https://raw.githubusercontent.com/IncapacheSpark/IncapacheSpark.github.i
         .attr("class", d => "myRect " + d.Name.replaceAll(' ', '_'))
         .attr("y", d => y(d.Name))
         .attr("height", y.bandwidth())
-        .attr("fill", "#ea9b07")
+        .attr("fill", "#FFCA3A")
         .style("opacity", 0.8)
         // no bar at the beginning thus:
         .attr("width", x(0)) // always equal to 0

@@ -49,7 +49,7 @@ d3.csv("https://raw.githubusercontent.com/IncapacheSpark/IncapacheSpark.github.i
 
     const color = d3.scaleOrdinal()
         .domain(TreeNames)
-        .range(['#FD0100', '#F76915', '#EEDE04', '#A0D636', '#2FA236', '#929191']);
+        .range(['#ff595e', '#ffca3a', '#8ac926', '#1982c4', '#6a4c93', '#ced4da']);
 
     // create a tooltip
     const tooltip = d3.select("#stackedChart")

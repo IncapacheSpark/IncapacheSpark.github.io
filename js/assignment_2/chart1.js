@@ -122,7 +122,7 @@ d3.csv("https://raw.githubusercontent.com/IncapacheSpark/IncapacheSpark.github.i
         .attr("height", function (d) {
             return height - y(d.length);
         })
-        .style("fill", "#ea9b07")
+        .style("fill", "#FFCA3A")
         .style("opacity", 0.8)
         // Show tooltip on hover
         .on("mouseover", showTooltip)
