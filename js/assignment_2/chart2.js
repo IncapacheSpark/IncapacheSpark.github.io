@@ -14,44 +14,47 @@ const svg = d3.select("#boxplot1")
         "translate(" + margin.left + "," + margin.top + ")");
 
 // Read the data and compute summary statistics for each specie
-d3.csv("https://raw.githubusercontent.com/IncapacheSpark/IncapacheSpark.github.io/main/python/data/ass2.csv", function (data) {
+d3.csv("https://raw.githubusercontent.com/IncapacheSpark/IncapacheSpark.github.io/main/python/data/ass2.csv").then(function (data) {
 
     // find the max value for X axis viz
-    const maxAxisX = Math.max.apply(Math, data.map(function (value) {
-        return value.Height;
+    const maxAxisX = Math.max.apply(Math, data.map(item => {
+        return item.Height;
     }));
 
     // find the min value for X axis viz
-    const minAxisX = Math.min.apply(Math, data.map(function (value) {
-        return value.Height;
+    const minAxisX = Math.min.apply(Math, data.map(item => {
+        return item.Height;
     }));
 
-    // Compute quartiles, median, inter quantile range min and max --> these info are then used to draw the box.
-    const sumstat = d3.nest() // nest function allows to group the calculation per level of a factor
-        .key(function (d) {
-            return d.Name;
-        })
-        .rollup(function (d) {
-            const q1 = d3.quantile(d.map(function (g) {
-                return parseFloat(g.Height);
-            }).sort(d3.ascending), .25)
-            const median = d3.quantile(d.map(function (g) {
-                return parseFloat(g.Height);
-            }).sort(d3.ascending), .5)
-            const q3 = d3.quantile(d.map(function (g) {
-                return parseFloat(g.Height);
-            }).sort(d3.ascending), .75)
-
+    const sumstat = d3.flatRollup(
+        data,
+        (box) => {
+            const y = (k) => k.Height;
+            const q1 = d3.quantile(
+                box.map((d) => d.Height),
+                0.25,
+            );
+            const median = d3.quantile(
+                box.map((d) => d.Height),
+                0.5,
+            );
+            const q3 = d3.quantile(
+                box.map((d) => d.Height),
+                0.75,
+            );
             const interQuantileRange = q3 - q1
-            const min = q1 - 1.5 * interQuantileRange
-            const max = q3 + 1.5 * interQuantileRange
-
-            const newMax = Math.max(min, minAxisX);
-            const newMin = Math.min(max, maxAxisX);
+            const newMax = Math.max(q1 - 1.5 * interQuantileRange, minAxisX);
+            const newMin = Math.min(q3 + 1.5 * interQuantileRange, maxAxisX);
 
             return ({q1: q1, median: median, q3: q3, interQuantileRange: interQuantileRange, min: newMax, max: newMin})
-        })
-        .entries(data)
+        },
+        (d) => d.Name,
+    );
+
+    // Color scale: give me a specie name, I return a color
+    const color = d3.scaleOrdinal()
+        .domain(["Celtis_australis", "Aesculus_hippocastanum", "Carpinus_betulus", "Tilia_cordata", "Platanus_x_hispanica", "Tilia_x_europaea"])
+        .range(["#2E86AB", "#A23B72", "#F18F01", "#C73E1D", "#3B1F2B", "#2EDA12FF"])
 
     // Show the Y scale
     const y = d3.scaleBand()
@@ -77,11 +80,6 @@ d3.csv("https://raw.githubusercontent.com/IncapacheSpark/IncapacheSpark.github.i
     // Customization
     svg.selectAll(".tick line").attr("stroke", "#EBEBEB")
 
-    // Color scale
-    const myColor = d3.scaleSequential()
-        .interpolator(d3.interpolateInferno)
-        .domain([0, maxAxisX])
-
     // Add X axis label:
     svg.append("text")
         .attr("text-anchor", "end")
@@ -95,34 +93,34 @@ d3.csv("https://raw.githubusercontent.com/IncapacheSpark/IncapacheSpark.github.i
         .attr("class", "tooltip")
 
     // Three function that change the tooltip when user hover / move / leave a cell
-    const mouseover = function (d) {
+    const mouseover = function (event, d) {
 
-        let values = d3.select(this).datum().value
+        let values = d3.select(this).datum()
 
         tooltip
             .transition()
             .duration(200)
             .style("opacity", 1)
 
-        if (d3.select(this).datum().key) {
+        if (values[0]) {
             tooltip
-                .html("<span>Median: " + values.median + "<br>" + "Min: " + values.min + "<br>" +
-                    "Max: " + values.max + "<br>" + "Lower quartile: " + values.q1 + "<br>" +
-                    "Upper quartile: " + values.q3 + "</span>")
-                .style("left", (d3.mouse(this)[0] - 300) + "px")
-                .style("top", (d3.mouse(this)[1] + 350) + "px")
+                .html("<span>Median: " + values[1].median + "<br>" + "Min: " + values[1].min + "<br>" +
+                    "Max: " + values[1].max + "<br>" + "Lower quartile: " + values[1].q1 + "<br>" +
+                    "Upper quartile: " + values[1].q3 + "</span>")
+                .style("left", (event.pageX) + "px")
+                .style("top", (event.pageY - 28) + "px");
         } else {
             tooltip
                 .html("<span>Tree Height (m): " + parseFloat(d.Height).toFixed(1) + "</span>")
-                .style("left", (d3.mouse(this)[0] - 300) + "px")
-                .style("top", (d3.mouse(this)[1] + 350) + "px")
+                .style("left", (event.pageX) + "px")
+                .style("top", (event.pageY - 28) + "px");
         }
 
     }
-    const mousemove = function () {
+    const mousemove = function (event) {
         tooltip
-            .style("left", (d3.mouse(this)[0] + 300) + "px")
-            .style("top", (d3.mouse(this)[1] + 350) + "px")
+            .style("left", (event.pageX) + "px")
+            .style("top", (event.pageY - 28) + "px");
     }
     const mouseleave = function () {
         tooltip
@@ -139,16 +137,16 @@ d3.csv("https://raw.githubusercontent.com/IncapacheSpark/IncapacheSpark.github.i
         .append("line")
         .attr("x1", function (d) {
             // return (x(d.value.min) < 0 ? 0 : x(d.value.min))
-            return x(d.value.min)
+            return x(d[1].min)
         })
         .attr("x2", function (d) {
-            return x(d.value.max)
+            return x(d[1].max)
         })
         .attr("y1", function (d) {
-            return y(d.key) + y.bandwidth() / 2;
+            return y(d[0]) + y.bandwidth() / 2;
         })
         .attr("y2", function (d) {
-            return y(d.key) + y.bandwidth() / 2;
+            return y(d[0]) + y.bandwidth() / 2;
         })
         .attr("stroke", "black")
         .style("width", 50);
@@ -159,19 +157,22 @@ d3.csv("https://raw.githubusercontent.com/IncapacheSpark/IncapacheSpark.github.i
         .data(sumstat)
         .enter()
         .append("rect")
+        .attr("class", "box")
         .attr("x", function (d) {
-            return x(d.value.q1);
+            return x(d[1].q1);
         })
         .attr("width", function (d) {
-            return (x(d.value.q3) - x(d.value.q1));
+            return 0;
         })
         .attr("y", function (d) {
-            return y(d.key);
+            return y(d[0]);
         })
         .attr("height", y.bandwidth())
         .attr("stroke", "black")
-        .style("fill", "#69b3a2")
-        .style("opacity", 1)
+        .style("fill", function (d) {
+            return color(d[0].replaceAll(' ', '_'))
+        })
+        .style("opacity", .8)
         .on("mouseover", mouseover)
         .on("mousemove", mousemove)
         .on("mouseleave", mouseleave)
@@ -182,25 +183,26 @@ d3.csv("https://raw.githubusercontent.com/IncapacheSpark/IncapacheSpark.github.i
         .data(sumstat)
         .enter()
         .append("line")
+        .attr("class", "median")
         .attr("y1", function (d) {
-            return (y(d.key))
+            return (y(d[0]))
         })
         .attr("y2", function (d) {
-            return (y(d.key) + y.bandwidth())
+            return (y(d[0]))
         })
         .attr("x1", function (d) {
-            return (x(d.value.median))
+            return (x(d[1].median))
         })
         .attr("x2", function (d) {
-            return (x(d.value.median))
+            return (x(d[1].median))
         })
         .attr("stroke", "black")
         .style("width", 100)
 
     // keep only the outliers
     const outliers = data.filter(d => {
-        let index = sumstat.findIndex(t => t.key === d.Name)
-        return d.Height > sumstat[index].value.max || d.Height < sumstat[index].value.min
+        let index = sumstat.findIndex(t => t[0] === d.Name)
+        return d.Height > sumstat[index][1].max || d.Height < sumstat[index][1].min
     })
 
     // Add individual points with jitter
@@ -217,12 +219,37 @@ d3.csv("https://raw.githubusercontent.com/IncapacheSpark/IncapacheSpark.github.i
         .attr("cy", function (d) {
             return (y(d.Name) + (y.bandwidth() / 2) - jitterWidth / 2 + Math.random() * jitterWidth)
         })
-        .attr("r", 4)
+        .attr("r", 0)
         .style("fill", function (d) {
-            return (myColor(+d.Height))
+            return color(d.Name.replaceAll(' ', '_'))
         })
         .attr("stroke", "black")
         .on("mouseover", mouseover)
         .on("mousemove", mousemove)
         .on("mouseleave", mouseleave)
+
+    svg.selectAll("circle")
+        .transition("loading")
+        .duration(500)
+        .attr("r", 4)
+        .delay(300);
+
+    svg.selectAll(".box")
+        .transition("loading")
+        .duration(500)
+        .attr("x", function (d) {
+            return x(d[1].q1);
+        })
+        .attr("width", function (d) {
+            return (x(d[1].q3) - x(d[1].q1));
+        })
+        .attr("height", y.bandwidth());
+
+    svg.selectAll(".median")
+        .transition("loading")
+        .duration(500)
+        .attr("y2", function (d) {
+            return (y(d[0]) + y.bandwidth())
+        })
+        .delay(30);
 })
