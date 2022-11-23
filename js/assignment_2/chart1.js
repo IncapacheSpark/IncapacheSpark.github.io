@@ -59,8 +59,7 @@ d3.csv("https://raw.githubusercontent.com/IncapacheSpark/IncapacheSpark.github.i
     // Its opacity is set to 1: we can now see it. Plus it set the text and position of tooltip depending on the datapoint (d)
     const showTooltip = function (event, d) {
 
-        const groupName = d3.select(this)._groups[0][0]
-        console.log(groupName)
+        d3.select(this).style("opacity", 1)
 
         tooltip
             .transition()
@@ -79,6 +78,9 @@ d3.csv("https://raw.githubusercontent.com/IncapacheSpark/IncapacheSpark.github.i
     }
     // A function that change this tooltip when the leaves a point: just need to set opacity to 0 again
     const hideTooltip = function () {
+
+        d3.selectAll("rect").style("opacity", 0.8)
+
         tooltip
             .transition()
             .duration(100)
@@ -102,15 +104,15 @@ d3.csv("https://raw.githubusercontent.com/IncapacheSpark/IncapacheSpark.github.i
     })]);   // d3.hist has to be called before the Y axis obviously
     yAxis
         .transition()
-        .duration(1000)
+        .duration(100)
         .call(d3.axisLeft(y).tickFormat(d3.format(".2s")));
 
     // Join the rect with the bins data
     svg.selectAll("rect")
         .data(bins)
-        .enter()
-        .append("rect")
+        .join("rect")
         .attr("x", 1)
+        .attr("y", 0)
         .attr("transform", function (d) {
             return "translate(" + x(d.x0) + "," + y(d.length) + ")";
         })
@@ -121,6 +123,7 @@ d3.csv("https://raw.githubusercontent.com/IncapacheSpark/IncapacheSpark.github.i
             return height - y(d.length);
         })
         .style("fill", "#ea9b07")
+        .style("opacity", 0.8)
         // Show tooltip on hover
         .on("mouseover", showTooltip)
         .on("mousemove", moveTooltip)
