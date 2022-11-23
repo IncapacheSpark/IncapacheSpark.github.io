@@ -82,12 +82,12 @@ d3.csv("https://raw.githubusercontent.com/IncapacheSpark/IncapacheSpark.github.i
             .attr("y1", d => 0.5 + y(d))
             .attr("y2", d => 0.5 + y(d)));
 
-    xAxis = (g, x) => g
+    let xAxis = (g, x) => g
         .attr("transform", `translate(0,${height})`)
         .call(d3.axisBottom(x).ticks(12))
     // .call(g => g.select(".domain").attr("display", "none"))
 
-    yAxis = (g, y) => g
+    let yAxis = (g, y) => g
         .call(d3.axisLeft(y).ticks(12 * k))
     // .call(g => g.select(".domain").attr("display", "none"))
 
@@ -126,7 +126,16 @@ d3.csv("https://raw.githubusercontent.com/IncapacheSpark/IncapacheSpark.github.i
                 .attr("height", height + margin.top * 2 + margin.bottom)
                 .append("g")
                 .attr("transform",
-                    "translate(" + margin.left + "," + margin.top * 3 + ")");
+                    "translate(" + margin.left + "," + margin.top * 3 + ")")
+                .on("click", reset);
+
+            function reset() {
+                svg.transition().duration(750).call(
+                    zoom.transform,
+                    d3.zoomIdentity,
+                    d3.zoomTransform(svg.node()).invert([width / 2, height / 2])
+                );
+            }
 
             svg.append("text")
                 .attr("transform", "translate(" + (width / 2) + " ," + (-margin.top) + ")")
