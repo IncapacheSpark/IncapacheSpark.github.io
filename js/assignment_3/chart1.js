@@ -6,35 +6,56 @@ const margin = {top: 60, right: 30, bottom: 20, left: 0},
 trento_center = [11.1207, 46.0664]
 
 const svg = d3.select("svg");
-
 const path = d3.geoPath();
-
-const projection = d3.geoIdentity().reflectY(true)
-
+const projection = d3.geoIdentity().reflectY(true);
 const data = new Map();
-const colorScale = d3.scaleThreshold()
-    .domain([40, 300, 500, 1000, 2000, 3100])
+const colorScale = d3.scaleQuantize()
+    .domain([0, 3024])
     .range(d3.schemeGreens[7]);
 
 // Load external data and boot
 Promise.all([
     d3.json("https://raw.githubusercontent.com/IncapacheSpark/IncapacheSpark.github.io/main/python/data/circoscrizioni.geojson"),
-    d3.csv("https://raw.githubusercontent.com/IncapacheSpark/IncapacheSpark.github.io/main/python/data/ass3.csv", function (d) {
+    d3.csv("https://raw.githubusercontent.com/IncapacheSpark/IncapacheSpark.github.io/main/python/data/ass3.csv", function(d) {
         data.set(d.circoscrizione, +d.count)
-    })]).then(function (loadData) {
-    let topo = loadData[0]
-    //console.log(topo)
+    })]).then(function(loadData){
+        let topo = loadData[0]
+    console.log("stampo topo"); console.log(topo);
+    
+    const mouseOver = function (event, d) {
 
-    projection.fitSize([width, height], topo)
-
-    // create a tooltip
-    const tooltip = d3.select("#choroplet_map_1")
-        .append("div")
-        .attr("class", "tooltip")
-
-
-    let mouseOver = function (event, d) {
-
+        projection.fitSize([width, height], topo)
+        
+        const tooltip = d3.select("#choroplet_map1") // create a tooltip
+            .append("div")
+            .attr("class", "tooltip")
+        
+        svg.append("g")       // Draw the map
+            .selectAll("path")
+            .data(topo.features)
+            .enter()
+            .append("path")
+            .attr("d", d3.geoPath()
+                .projection(projection)  // draw each circoscrizione
+            )
+            .attr("fill", function (d) {     // set the color of each circoscrizione
+                //console.log(d)
+                d.total = data.get(d.properties.nome) || 0;
+                //console.log(d.total)
+                return colorScale(d.total);
+            })
+            .style("stroke", "transparent")
+            .attr("class", function(d){ return "Country" } )
+            .attr("class", function(d){ return d.properties.nome } )
+            .style("opacity", .8)
+            .on("mouseover", function (event, d) {    // what subgroup are we hovering?
+                //console.log(d.properties.nome)
+            
+                
+                const subGroupName = d.properties.nome
+                tooltip.transition()
+                    .duration(200)
+                    .style("opacity", 1);
         tooltip
             .transition()
             .duration(200)
@@ -59,7 +80,7 @@ Promise.all([
             .style("stroke-width", "1px")
     }
 
-    let mouseLeave = function () {
+    const mouseLeave = function () {
         d3.selectAll("path")
             .transition()
             .duration(200)
