@@ -18,40 +18,7 @@ const colorScale = d3.scaleThreshold()
     .domain([1000, 3000, 4000, 5000, 7000, 10000, 40000, 55000])
     .range(d3.schemeBlues[9]);
 
-// Add color legend
-shapeWidthlegend_3 = 100;
-const labels_3 = ['0', '1000', '2000', '4000', '10000', '50000',];
-const legend_3_size = shapeWidthlegend_3*labels_3.length;
-const scaleFactor_3 = 0.8;
-const legend_3 = d3.legendColor()
-    .labels(function (d) { return labels_3[d.i]; })
-    .shapePadding(0)
-    .orient("horizontal")
-    .shapeWidth(shapeWidthlegend_3)
-    .scale(colorScale)
-    .labelAlign("start") ;
-svg.append("g")
-    .attr("class", "legendThreshold")
-    .attr("font-family", "Fira Sans, sans-serif")
-    .attr("font-size", "12px")
-    .attr("transform", `translate(${(scaleFactor_3*width - legend_3_size - (margin.left - margin.right))/2},
-                                  ${height - margin.bottom/2})`);
 
-svg.select(".legendThreshold")
-    .append("text")
-        .attr("class", "caption")
-        .attr("x", legend_3_size/2)
-        .attr("y", -20)
-        .style("font-family", "Fira Sans, sans-serif")
-        .style("font-size", "14px")
-        .attr("text-anchor", "middle")
-        .text("Oxygen (kg/yr)");
-
-svg.select(".legendThreshold")
-    .call(legend_3);
-
-//var cb = d3.colorbarV(colorScale, 20, 100);
-//svg.append('g').call(cb);
 
 // Load external data and boot
 Promise.all([
@@ -87,19 +54,22 @@ Promise.all([
             return colorScale(d.total);
         })
         .style("stroke", "transparent")
-        .attr("class", function(d){ return "Country "+ d.properties.nome } )
+        .attr("class", function(d){
+            console.log("Country "+ d.properties.nome.replaceAll(' ', '').replaceAll('.', ''))
+            return "Country "+ d.properties.nome.replaceAll(' ', '').replaceAll('.', '')
+        })
         //.attr("class", function(d){ return d.properties.nome } )
         .style("opacity", .8)
         .on("mouseover", function (event, d) { 
             //console.log(d.properties.nome)
-            // what subgroup are we hovering?
             
-            const subGroupName = d.properties.nome
+            const subGroupName = d.properties.nome.replaceAll(' ', '').replaceAll('.', '') // what subgroup are we hovering?
+
             tooltip.transition()
                 .duration(200)
                 .style("opacity", 1);
 
-            tooltip.html("<span class='tooltiptext'>" + "Neighborhood: " + subGroupName + "<br>" + "Oxygen production: " + d.total + " (Kg/yr)" + "</span>")
+            tooltip.html("<span class='tooltiptext'>" + "Neighborhood: " + d.properties.nome + "<br>" + "Oxygen production: " + d.total + " (Kg/yr)" + "</span>")
                 .style("left", (event.pageX) + "px")
                 .style("top", (event.pageY - 28) + "px");
 
@@ -110,11 +80,11 @@ Promise.all([
             // Highlight all rects of this subgroup with opacity 1.
             // It is possible to select them since they have a specific class = their name.
             d3.select("." + subGroupName)
-                .style("opacity", 1)
-
+                .style("opacity", 1);
+                //.style("fill", "e21dab");
+            
         })
         .on("mouseleave", function () { // When user do not hover anymore
-
             tooltip.transition()
                 .duration(200)
                 .style("opacity", 0);
