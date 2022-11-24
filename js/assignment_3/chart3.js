@@ -8,12 +8,14 @@ trento_center = [11.1207, 46.0664]
 const svg = d3.select("svg");
 const path = d3.geoPath();
 const projection = d3.geoIdentity().reflectY(true)
-
 const data = new Map();
 MAX_OXYGEN = 53818.4;
-const colorScale = d3.scaleQuantize()
+color_arr = d3.schemeBlues[9].slice(1);
+color_arr.push("#000b33");
+const colorScale = d3.scalePow()
     .domain([0, MAX_OXYGEN])
-    .range(d3.schemeBlues[9].slice(1))
+    .range([color_arr[0], color_arr[8]])
+    .exponent(0.5);
 
 Promise.all([
     d3.json("https://raw.githubusercontent.com/IncapacheSpark/IncapacheSpark.github.io/main/python/data/circoscrizioni.geojson"),
