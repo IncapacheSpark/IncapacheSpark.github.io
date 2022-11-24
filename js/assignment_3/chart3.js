@@ -13,9 +13,45 @@ var projection = d3.geoIdentity().reflectY(true)
 
 
 const data = new Map();
+
 const colorScale = d3.scaleThreshold()
-.domain([1000, 3000, 5000, 7000, 10000, 55000])
-.range(d3.schemeBlues[7]);
+    .domain([1000, 3000, 4000, 5000, 7000, 10000, 40000, 55000])
+    .range(d3.schemeBlues[9]);
+
+// Add color legend
+shapeWidthlegend_3 = 100;
+const labels_3 = ['0', '1000', '2000', '4000', '10000', '50000',];
+const legend_3_size = shapeWidthlegend_3*labels_3.length;
+const scaleFactor_3 = 0.8;
+const legend_3 = d3.legendColor()
+    .labels(function (d) { return labels_3[d.i]; })
+    .shapePadding(0)
+    .orient("horizontal")
+    .shapeWidth(shapeWidthlegend_3)
+    .scale(colorScale)
+    .labelAlign("start") ;
+svg.append("g")
+    .attr("class", "legendThreshold")
+    .attr("font-family", "Fira Sans, sans-serif")
+    .attr("font-size", "12px")
+    .attr("transform", `translate(${(scaleFactor_3*width - legend_3_size - (margin.left - margin.right))/2},
+                                  ${height - margin.bottom/2})`);
+
+svg.select(".legendThreshold")
+    .append("text")
+        .attr("class", "caption")
+        .attr("x", legend_3_size/2)
+        .attr("y", -20)
+        .style("font-family", "Fira Sans, sans-serif")
+        .style("font-size", "14px")
+        .attr("text-anchor", "middle")
+        .text("Oxygen (kg/yr)");
+
+svg.select(".legendThreshold")
+    .call(legend_3);
+
+//var cb = d3.colorbarV(colorScale, 20, 100);
+//svg.append('g').call(cb);
 
 // Load external data and boot
 Promise.all([
