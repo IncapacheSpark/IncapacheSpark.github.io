@@ -28,13 +28,11 @@ Promise.all([
 
         projection.fitSize([width, height], topo)
 
-        
         // create a tooltip
         const tooltip = d3.select("#choroplet_map_3")
         .append("div")
         .attr("class", "tooltip")
         
-    
         // Draw the map
         svg.append("g")
         .selectAll("path")
@@ -53,8 +51,8 @@ Promise.all([
             return colorScale(d.total);
         })
         .style("stroke", "transparent")
-        .attr("class", function(d){ return "Country" } )
-        .attr("class", function(d){ return d.properties.nome } )
+        .attr("class", function(d){ return "Country "+ d.properties.nome } )
+        //.attr("class", function(d){ return d.properties.nome } )
         .style("opacity", .8)
         .on("mouseover", function (event, d) { 
             //console.log(d.properties.nome)
@@ -65,7 +63,7 @@ Promise.all([
                 .duration(200)
                 .style("opacity", 1);
 
-            tooltip.html("<span class='tooltiptext'>" + "neighborhood: " + subGroupName + "<br>" + "Oxygen: " + d.total + "</span>")
+            tooltip.html("<span class='tooltiptext'>" + "Neighborhood: " + subGroupName + "<br>" + "Oxygen production: " + d.total + " (Kg/yr)" + "</span>")
                 .style("left", (event.pageX) + "px")
                 .style("top", (event.pageY - 28) + "px");
 
@@ -75,7 +73,7 @@ Promise.all([
 
             // Highlight all rects of this subgroup with opacity 1.
             // It is possible to select them since they have a specific class = their name.
-            d3.selectAll("." + subGroupName)
+            d3.select("." + subGroupName)
                 .style("opacity", 1)
 
         })
