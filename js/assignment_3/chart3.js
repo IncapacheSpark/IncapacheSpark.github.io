@@ -14,57 +14,27 @@ var projection = d3.geoIdentity().reflectY(true)
 
 const data = new Map();
 const colorScale = d3.scaleThreshold()
-.domain([40, 300, 500, 1000, 2000, 3100])
-.range(d3.schemeGreens[7]);
+.domain([1000, 3000, 5000, 7000, 10000, 55000])
+.range(d3.schemeBlues[7]);
 
 // Load external data and boot
 Promise.all([
     d3.json("https://raw.githubusercontent.com/IncapacheSpark/IncapacheSpark.github.io/main/python/data/circoscrizioni.geojson"),
     d3.csv("https://raw.githubusercontent.com/IncapacheSpark/IncapacheSpark.github.io/main/python/data/ass3.csv", function(d) {
-        data.set(d.circoscrizione, +d.count)
+        data.set(d.circoscrizione, +d.oxygen_tot)
     })]).then(function(loadData){
         let topo = loadData[0]
         //console.log(topo)
 
         projection.fitSize([width, height], topo)
 
-        /*
+        
         // create a tooltip
-        const tooltip = d3.select("#my_dataviz")
+        const tooltip = d3.select("#choroplet_map_3")
         .append("div")
         .attr("class", "tooltip")
-        */
         
-
-        let mouseOver = function(d) {
-            /*tooltip
-            .transition()
-            .duration(200)
-            .style("opacity", 1)
-            */
-            d3.selectAll(".Country")
-              .transition()
-              .duration(200)
-              .style("opacity", .5)
-            d3.select(this)
-              .transition()
-              .duration(200)
-              .style("opacity", 1)
-              .style("stroke", "black")
-        }
-
-        let mouseLeave = function(d) {
-            d3.selectAll(".Country")
-              .transition()
-              .duration(200)
-              .style("opacity", .8)
-            d3.select(this)
-              .transition()
-              .duration(200)
-              .style("stroke", "transparent")
-        }
-
-
+    
         // Draw the map
         svg.append("g")
         .selectAll("path")
@@ -79,12 +49,44 @@ Promise.all([
         .attr("fill", function (d) {
             //console.log(d)
             d.total = data.get(d.properties.nome) || 0;
-            console.log(d.total)
+            //console.log(d.total)
             return colorScale(d.total);
         })
         .style("stroke", "transparent")
         .attr("class", function(d){ return "Country" } )
+        .attr("class", function(d){ return d.properties.nome } )
         .style("opacity", .8)
-        .on("mouseover", mouseOver )
-        .on("mouseleave", mouseLeave )
+        .on("mouseover", function (event, d) { 
+            //console.log(d.properties.nome)
+            // what subgroup are we hovering?
+            
+            const subGroupName = d.properties.nome
+            tooltip.transition()
+                .duration(200)
+                .style("opacity", 1);
+
+            tooltip.html("<span class='tooltiptext'>" + "neighborhood: " + subGroupName + "<br>" + "Oxygen: " + d.total + "</span>")
+                .style("left", (event.pageX) + "px")
+                .style("top", (event.pageY - 28) + "px");
+
+            // Reduce opacity of all rect to 0.2
+            d3.selectAll(".Country")
+                .style("opacity", 0.2)
+
+            // Highlight all rects of this subgroup with opacity 1.
+            // It is possible to select them since they have a specific class = their name.
+            d3.selectAll("." + subGroupName)
+                .style("opacity", 1)
+
+        })
+        .on("mouseleave", function () { // When user do not hover anymore
+
+            tooltip.transition()
+                .duration(200)
+                .style("opacity", 0);
+
+            // Back to normal opacity: 1
+            d3.selectAll(".Country")
+                .style("opacity", 1)
+        })
     });
