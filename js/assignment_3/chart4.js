@@ -1,8 +1,17 @@
+// set the dimensions and margins of the graph
+const margin = {top: 60, right: 30, bottom: 20, left: 0},
+    width = 600 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
 
 // The svg
-const svg = d3.select("svg"),
-    width = +svg.attr("width"),
-    height = +svg.attr("height");
+const svg = d3.select("#dotdensity_map_4")
+  .append("svg")
+  .attr('width', '100%')
+  .attr('viewBox', '0 0 ' + (width + margin.left + margin.right) + ' ' + (height + margin.top + margin.bottom))
+  .attr("preserveAspectRatio", "xMinYMin meet")
+  .append("g")
+  .attr("transform",
+      `translate(${margin.left}, ${margin.top})`);
 
 trento_center = [11.1207, 46.0664]
 
