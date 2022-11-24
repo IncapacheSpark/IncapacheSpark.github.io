@@ -4,7 +4,7 @@ const margin = {top: 40, right: 150, bottom: 60, left: 40},
     height = 420 - margin.top - margin.bottom;
 
 // append the svg object to the body of the page
-const svg = d3.select("#histogram")
+const svg = d3.select("#choroplet_map1")
     .append("svg")
     .attr('width', '100%')
     .attr('viewBox', '0 0 ' + (width + margin.left + margin.right) + ' ' + (height + margin.top + margin.bottom))
