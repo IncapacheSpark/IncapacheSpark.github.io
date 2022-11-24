@@ -33,7 +33,7 @@ Promise.all([
             .projection(projection)
         )
         .style("stroke", "white")
-        .style("opacity", .3)
+        .style("opacity", .2)
 
     // Add circles:
     svg
@@ -42,7 +42,7 @@ Promise.all([
         .join("circle")
         .attr("cx", d => projection([+d.Longitude, +d.Latitude])[0])
         .attr("cy", d => projection([+d.Longitude, +d.Latitude])[1])
-        .attr("r", 1)
+        .attr("r", 2)
         .style("fill", "green")
         .attr("stroke", "none")
         .attr("stroke-width", 1)
