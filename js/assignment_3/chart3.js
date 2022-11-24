@@ -47,6 +47,12 @@ Promise.all([
             .style("left", (event.pageX) + "px")
             .style("top", (event.pageY - 28) + "px");
 
+        d3.selectAll("path")
+            .transition()
+            .duration(200)
+            .style("opacity", 0.5)
+            .style("stroke", "none")
+
         d3.select(this)
             .transition()
             .duration(200)
@@ -58,7 +64,7 @@ Promise.all([
         d3.selectAll("path")
             .transition()
             .duration(200)
-            .style("opacity", .8)
+            .style("opacity", 1)
             .style("stroke", "white")
 
         tooltip
