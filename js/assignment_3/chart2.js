@@ -57,8 +57,8 @@ Promise.all([
                 .style("opacity", 1);
             tooltip
                 .html("<span class='tooltiptext'>" + "Neighbourhood: "+ d.properties.nome
-                  + "<br>" + "Density: " + d.density
-                  + "<br>" + "Area: " + d.properties.area + " (m2)"
+                  + "<br>" + "Density: " + d.density.toPrecision(3)
+                  + "<br>" + "Area: " + d.properties.area.toPrecision(2) + " (m2)"
                   + "<br>" + "Tree aboundance: " + d.total +"</span>")
                 .style("left", (event.pageX) + "px")
                 .style("top", (event.pageY - 28) + "px");
