@@ -1,3 +1,21 @@
+function scientific_notation(int_num){
+    if(int_num<1000)
+        return int_num.toString();
+    if(! Number.isInteger(int_num))
+    {
+        console.log("num is already float")
+        return int_num.toString();
+    }
+    else {
+    var length = Math.log(int_num) * Math.LOG10E + 1 | 0;
+    exponent = length-1;
+    relevant_digits = int_num.toString().slice(0,2);
+    return relevant_digits[0] + "." + relevant_digits[1] + " x10^" + exponent;
+    }
+}
+
+
+
 // set the dimensions and margins of the graph
 const margin = {top: 60, right: 30, bottom: 20, left: 0},
     width = 700 - margin.left - margin.right,
@@ -46,7 +64,7 @@ Promise.all([
         tooltip
             .html("<span class='tooltiptext'>"+ "Neighbourhood: "+ d.properties.nome
                 + "<br>" + "Oxigen production: " + d.oxigen + " (kg/yr)"
-                + "<br>" + "Area: " + d.properties.area + " (m2)"
+                + "<br>" + "Area: " + scientific_notation(d.properties.area) + " (m2)"
                 + "<br>" + "Tree aboundance: " + d.total +"</span>")
             .style("left", (event.pageX) + "px")
             .style("top", (event.pageY - 28) + "px");
