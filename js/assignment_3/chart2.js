@@ -51,6 +51,8 @@ Promise.all([
 
         // Three function that change the tooltip when user hover / move / leave a cell
         const mouseOver = function (event, d) {
+            const audio = new Audio("/js/assignment_3/sound.mp3");
+            audio.play();
             tooltip
                 .transition()
                 .duration(200)

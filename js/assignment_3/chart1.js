@@ -38,7 +38,8 @@ Promise.all([
             .attr("class", "tooltip")
 
         const mouseOver = function (event, d) {
-
+            const audio = new Audio("/js/assignment_3/sound.mp3");
+            audio.play();
             tooltip.transition()
                 .duration(200)
                 .style("opacity", 1);

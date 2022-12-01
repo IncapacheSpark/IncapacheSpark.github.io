@@ -1,13 +1,17 @@
+const margin = {top: 60, right: 30, bottom: 20, left: 0},
+    width = 900 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
 
-// The svg
-const svg = d3.select("svg"),
-    width = +svg.attr("width"),
-    height = +svg.attr("height");
+const svg = d3.select("#dotdensity_map_5")
+    .append("svg")
+    .attr('width', '100%')
+    .attr('viewBox', '0 0 ' + (width + margin.left + margin.right) + ' ' + (height + margin.top + margin.bottom))
+    .attr("preserveAspectRatio", "xMinYMin meet")
+    .append("g")
+    .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
 trento_center = [11.1207, 46.0664]
-
 const projection = d3.geoIdentity().reflectY(true)
-
 
 Promise.all([
     d3.json("https://raw.githubusercontent.com/IncapacheSpark/IncapacheSpark.github.io/main/python/data/circoscrizioni.geojson"),
@@ -129,11 +133,11 @@ Promise.all([
             }
         })
         .on("mouseover", (e, d) =>{
-            
+            console.log(d)
             tooltip.transition()		
                 .duration(200)		
                 .style("opacity", .9);		
-            tooltip.html("Tree species: " + d.Name)
+            tooltip.html("Tree species: " + d.Name + "<br>" + "Neighbourhood: "+ d.properties.nome)
                 .style("left", (event.pageX) + "px")		
                 .style("top", (event.pageY - 28) + "px");
         })

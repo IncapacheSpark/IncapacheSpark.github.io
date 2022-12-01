@@ -1,9 +1,7 @@
-// set the dimensions and margins of the graph
 const margin = {top: 60, right: 30, bottom: 20, left: 0},
     width = 600 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
 
-// The svg
 const svg = d3.select("#dotdensity_map_4")
   .append("svg")
   .attr('width', '100%')

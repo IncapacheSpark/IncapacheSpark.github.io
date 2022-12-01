@@ -3,17 +3,15 @@ const margin = {top: 60, right: 30, bottom: 20, left: 0},
     width = 700 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
 
-trento_center = [11.1207, 46.0664]
-
 const svg = d3.select("#choroplet_map_3")
   .append("svg")
   .attr('width', '100%')
   .attr('viewBox', '0 0 ' + (width + margin.left + margin.right) + ' ' + (height + margin.top + margin.bottom))
   .attr("preserveAspectRatio", "xMinYMin meet")
   .append("g")
-  .attr("transform",
-      `translate(${margin.left}, ${margin.top})`);
+  .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
+trento_center = [11.1207, 46.0664];
 const path = d3.geoPath();
 const projection = d3.geoIdentity().reflectY(true)
 const data = new Map();
@@ -39,6 +37,8 @@ Promise.all([
         .attr("class", "tooltip")
 
     let mouseOver = function (event, d) {
+        const audio = new Audio("/js/assignment_3/sound.mp3");
+        audio.play();
         tooltip
             .transition()
             .duration(200)
