@@ -48,7 +48,7 @@ Promise.all([
                 .style("opacity", 1);
 
             tooltip
-                .html("<span class='tooltiptext'>" + d.properties.nome + "<br>" + "Tree aboundance: " + d.total + "</span>")
+                .html("<span class='tooltiptext'>" + d.properties.nome + "<br>" + "Tree abundance: " + d.total + "</span>")
                 .style("left", (event.pageX) + "px")
                 .style("top", (event.pageY - 28) + "px");
 

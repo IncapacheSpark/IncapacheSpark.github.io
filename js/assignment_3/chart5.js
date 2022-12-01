@@ -33,7 +33,7 @@ Promise.all([
 
     var trees_colors = ['#6888CB','#738074', '#D82B36', '#000000',	'#59481A','#2831DC', '#8E752E', '#58C00F', '#DA6797', '#4B08B1', '#EAF364'];
 
-    // Color scale: give me a specie name, I return a color
+    // Color scale: give me a species name, I return a color
     const color = d3.scaleOrdinal()
     .domain(trees_types)
     .range(trees_colors);
@@ -52,16 +52,16 @@ Promise.all([
         .style("opacity", 0);
 
 
-    // Highlight the specie that is hovered
+    // Highlight the species that is hovered
     const highlight = function (event, d) {
-        selected_specie = d
+        selected_species = d
         d3.selectAll(".dot")
             .style("opacity", 0)
-        d3.selectAll("." + selected_specie.replaceAll(' ', '_'))
+        d3.selectAll("." + selected_species.replaceAll(' ', '_'))
             .style("opacity", 1)
     }
 
-    // Highlight the specie that is hovered
+    // Highlight the species that is hovered
     const doNotHighlight = function () {
         d3.selectAll(".dot")
             .style("opacity", 1)
@@ -133,7 +133,7 @@ Promise.all([
             tooltip.transition()		
                 .duration(200)		
                 .style("opacity", .9);		
-            tooltip.html("Tree specie: " + d.Name)
+            tooltip.html("Tree species: " + d.Name)
                 .style("left", (event.pageX) + "px")		
                 .style("top", (event.pageY - 28) + "px");
         })
