@@ -21,6 +21,12 @@ const colors = {
     '2021': '#333233'
 }
 
+const param = {
+    'average': 'avg_temp',
+    'minimum': 'min_temp',
+    'maximum': 'max_temp'
+}
+
 
 const CENTER_X = 300;
 const CENTER_Y = CENTER_X;
@@ -46,8 +52,23 @@ d3.csv(url).then(function (data) {
         element.year = element.day.slice(0, 4);
     });
 
+    // List of groups (here I have one group per column)
+    const items = ["minimum", "maximum", "average"]
     const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     console.log(data);
+
+    // add the options to the button
+    d3.select("#selection")
+        .selectAll('myOptions')
+        .data(items)
+        .enter()
+        .append('option')
+        .text(function (d) {
+            return d;
+        }) // text showed in the menu
+        .attr("value", function (d) {
+            return d;
+        }) // corresponding value returned by the button
 
     min_max_domain = [d3.min(data, function (d) {
         return +d.min_temp;
@@ -97,109 +118,169 @@ d3.csv(url).then(function (data) {
         .append("div")
         .attr("class", "tooltip")
 
+    function display(val) {
 
-    const highlight = function (event, el) {
+        d3.selectAll("path").remove();
+        d3.selectAll(".circle").remove();
 
-        const min_temp = d3.min(data, function (d) {
-            if (d.year === el.toString())
-                return d.min_temp;
-        })
-        const max_temp = d3.max(data, function (d) {
-            if (d.year === el.toString())
-                return d.max_temp;
-        })
-        const avg_temp = d3.median(data, function (d) {
-            if (d.year === el.toString())
-                return d.avg_temp;
-        })
-        selected_year = el
+        let parameter = param[val];
 
-        d3.selectAll("path")
-            .style("stroke", "grey")
-            .style("opacity", .5)
+        const highlight = function (event, el) {
 
-        d3.selectAll(".circle")
-            .style("fill", "grey")
-            .style("opacity", .5)
+            const min_temp = d3.min(data, function (d) {
+                if (d.year === el.toString())
+                    return d.min_temp;
+            })
+            const max_temp = d3.max(data, function (d) {
+                if (d.year === el.toString())
+                    return d.max_temp;
+            })
+            const avg_temp = d3.median(data, function (d) {
+                if (d.year === el.toString())
+                    return d.avg_temp;
+            })
+            selected_year = el
 
-        d3.selectAll(".obs_circle" + selected_year)
-            .style("fill", colors[selected_year])
-            .style("opacity", 1)
+            d3.selectAll("path")
+                .style("stroke", "grey")
+                .style("opacity", .5)
 
-        d3.selectAll(".y" + selected_year)
-            .style("stroke", colors[selected_year])
-            .style("fill", colors[selected_year])
-            .style("opacity", .5)
+            d3.selectAll(".circle")
+                .style("fill", "grey")
+                .style("opacity", .5)
 
-        d3.selectAll(".domain")
-            .style("stroke", "black")
-            .style("opacity", 1)
+            d3.selectAll(".obs_circle" + selected_year)
+                .style("fill", colors[selected_year])
+                .style("opacity", 1)
 
-        tooltip.transition()
-            .duration(200)
-            .style("opacity", 1);
+            d3.selectAll(".y" + selected_year)
+                .style("stroke", colors[selected_year])
+                .style("fill", colors[selected_year])
+                .style("opacity", .5)
 
-        tooltip.html("<span class='tooltiptext'>" + "Mean temperature: " + avg_temp + " °C" + "<br>"
-            + "</span>")
-            .style("left", (event.pageX) + "px")
-            .style("top", (event.pageY - 28) + "px");
+            d3.selectAll(".domain")
+                .style("stroke", "black")
+                .style("opacity", 1)
 
-    }  //fine funzione highlight
+            tooltip.transition()
+                .duration(200)
+                .style("opacity", 1);
 
-    const doNotHighlight = function () {
-        d3.selectAll("path")
-            .style("stroke", d => colors[d])
-            .style("fill", "none")
-            .style("opacity", 1);
+            tooltip.html("<span class='tooltiptext'>" + "Mean temperature: " + avg_temp + " °C" + "<br>"
+                + "</span>")
+                .style("left", (event.pageX) + "px")
+                .style("top", (event.pageY - 28) + "px");
 
-        d3.selectAll(".circle")
-            .style("fill", d => colors[d.year])
-            .style("opacity", 1);
+        }  //fine funzione highlight
 
-        tooltip
-            .transition()
-            .duration(100)
-            .style("opacity", 0);
+        const doNotHighlight = function () {
+            d3.selectAll("path")
+                .style("stroke", d => colors[d])
+                .style("fill", "none")
+                .style("opacity", 1);
+
+            d3.selectAll(".circle")
+                .style("fill", d => colors[d.year])
+                .style("opacity", 1);
+
+            tooltip
+                .transition()
+                .duration(100)
+                .style("opacity", 0);
+        }
+
+        /* CREAZIONE LINEE SPEZZATE */
+        const sumstat = d3.group(data, d => d.year);    //raggruppo righe per ogni anno
+        d3.selectAll("path")                            //seleziona elementi path prima di crearli
+            .style("stroke", "grey")       //ogni elemento path e' una linea spezzata per un anno di temperature
+            .style("opacity", .4)
+
+        svg.selectAll(".line")
+            .data(sumstat)
+            .join("path")
+            .attr("class", function (d) {       //determino classe css dell'anno, e.g. "y1993"
+                return "y" + d[0]
+            })
+            .attr("fill", "none")
+            .attr("stroke", function (d) {     //colore dell'anno
+                return colors[d[0]]
+            })
+            .attr("stroke-width", 1.5)
+            .attr("d", function (d) {   //lista di coordinate del cammino
+                return d3.line()
+                    .x(function (d) {
+                        let index = +d.month - 1// lui fa -1
+                        let angle = (Math.PI / 2) + (2 * Math.PI * index / months.length);
+                        let value = d[parameter];
+                        let coords = angleToCoordinate(angle, value);      //as object{x: , y:}
+                        return coords.x
+                        //return x(months[+d.month - 1]);  //vecchia versione
+                    })
+                    .y(function (d) {
+                        let index = +d.month - 1 // lui fa -1
+                        let angle = (Math.PI / 2) + (2 * Math.PI * index / months.length);
+                        let value = d[parameter];
+                        let coords = angleToCoordinate(angle, value);      //as object{x: , y:}
+                        return coords.y;
+                        //return y(+d.max_temp);
+                    })
+                    (d[1])
+            })
+
+        // CERCHI CON OSSERVAZIONI SU OGNI MESE
+        svg.selectAll("mycircle")
+            .data(data)
+            .join("circle")            //il nome dell'elemento svg
+            .attr("class", function (d) {
+                return "obs_circle" + d.year + " circle";
+            })
+            .attr("cx", function (d) {
+                let index = +d.month - 1
+                let angle = (Math.PI / 2) + (2 * Math.PI * index / months.length);
+                let value = d[parameter];
+                let coords = angleToCoordinate(angle, value);      //as object{x: , y:}
+                return coords.x
+            })
+            .attr("cy", function (d) {
+                let index = +d.month - 1
+                let angle = (Math.PI / 2) + (2 * Math.PI * index / months.length);
+                let value = d[parameter];
+                let coords = angleToCoordinate(angle, value);      //as object{x: , y:}
+                return coords.y
+            })
+            .attr("r", 3)
+            .style("fill", function (d) {
+                return colors[d.year]
+            });
+
+        /*LEGENDA CHE ILLUSTRA IL COLORE */
+        const size = 20
+        const years = [1993, 1997, 2001, 2005, 2009, 2013, 2017, 2021]
+        svg.selectAll("myrect")
+            .data(years)
+            .join("rect")
+            .attr("x", 645)
+            .attr("y", (d, i) => 10 + i * (size + 6)) // 100 is where the first dot appears. 25 is the distance between dots
+            .attr("width", 18)
+            .attr('height', 5)
+            .style("fill", d => colors[d])
+            .on("mouseover", highlight)
+            .on("mouseleave", doNotHighlight)
+
+        svg.selectAll("mylabels")
+            .data(years)
+            .enter()
+            .append("text")
+            .attr("x", 655 + size * .8)
+            .attr("y", (d, i) => i * (size + 6) + (size / 2)) // 100 is where the first dot appears. 25 is the distance between dots
+            .style("fill", d => colors[d])
+            .text(d => d)
+            .attr("text-anchor", "left")
+            .style("alignment-baseline", "middle")
+            .on("mouseover", highlight)
+            .on("mouseleave", doNotHighlight)
+
     }
-
-
-    /* CREAZIONE LINEE SPEZZATE */
-    const sumstat = d3.group(data, d => d.year);    //raggruppo righe per ogni anno
-    d3.selectAll("path")                            //seleziona elementi path prima di crearli
-        .style("stroke", "grey")       //ogni elemento path e' una linea spezzata per un anno di temperature
-        .style("opacity", .4)
-
-    svg.selectAll(".line")
-        .data(sumstat)
-        .join("path")
-        .attr("class", function (d) {       //determino classe css dell'anno, e.g. "y1993"
-            return "y" + d[0]
-        })
-        .attr("fill", "none")
-        .attr("stroke", function (d) {     //colore dell'anno
-            return colors[d[0]]
-        })
-        .attr("stroke-width", 1.5)
-        .attr("d", function (d) {//lista di coordinate del cammino
-            return d3.line()
-                .x(function (d) {
-                    let index = +d.month - 1// lui fa -1
-                    let angle = (Math.PI / 2) + (2 * Math.PI * index / months.length);
-                    let value = d.avg_temp;
-                    let coords = angleToCoordinate(angle, value);      //as object{x: , y:}
-                    return coords.x
-                    //return x(months[+d.month - 1]);  //vecchia versione
-                })
-                .y(function (d) {
-                    let index = +d.month - 1 // lui fa -1
-                    let angle = (Math.PI / 2) + (2 * Math.PI * index / months.length);
-                    let value = d.avg_temp;
-                    let coords = angleToCoordinate(angle, value);      //as object{x: , y:}
-                    return coords.y;
-                    //return y(+d.max_temp);
-                })
-                (d[1])
-        })
 
     /* CIRCONFERENZE CONCENTRICHE */
     ticks.forEach(t =>                  //LE circonfrenze concentriche intersecano i tick
@@ -212,59 +293,14 @@ d3.csv(url).then(function (data) {
             .attr("class", "concentric_circle")
     );
 
-    // CERCHI CON OSSERVAZIONI SU OGNI MESE
-    svg.selectAll("mycircle")
-        .data(data)
-        .join("circle")            //il nome dell'elemento svg
-        .attr("class", function (d) {
-            return "obs_circle" + d.year + " circle";
-        })
-        .attr("cx", function (d) {
-            let index = +d.month - 1
-            let angle = (Math.PI / 2) + (2 * Math.PI * index / months.length);
-            let value = d.avg_temp;
-            let coords = angleToCoordinate(angle, value);      //as object{x: , y:}
-            return coords.x
-        })
-        .attr("cy", function (d) {
-            let index = +d.month - 1
-            let angle = (Math.PI / 2) + (2 * Math.PI * index / months.length);
-            let value = d.avg_temp;
-            let coords = angleToCoordinate(angle, value);      //as object{x: , y:}
-            return coords.y
-        })
-        .attr("r", 3)
-        .style("fill", function (d) {
-            return colors[d.year]
-        });
+    display("average")
 
-
-    /*LEGENDA CHE ILLUSTRA IL COLORE */
-    const size = 20
-    const years = [1993, 1997, 2001, 2005, 2009, 2013, 2017, 2021]
-    svg.selectAll("myrect")
-        .data(years)
-        .join("rect")
-        .attr("x", 645)
-        .attr("y", (d, i) => 10 + i * (size + 6)) // 100 is where the first dot appears. 25 is the distance between dots
-        .attr("width", 18)
-        .attr('height', 5)
-        .style("fill", d => colors[d])
-        .on("mouseover", highlight)
-        .on("mouseleave", doNotHighlight)
-
-    svg.selectAll("mylabels")
-        .data(years)
-        .enter()
-        .append("text")
-        .attr("x", 655 + size * .8)
-        .attr("y", (d, i) => i * (size + 6) + (size / 2)) // 100 is where the first dot appears. 25 is the distance between dots
-        .style("fill", d => colors[d])
-        .text(d => d)
-        .attr("text-anchor", "left")
-        .style("alignment-baseline", "middle")
-        .on("mouseover", highlight)
-        .on("mouseleave", doNotHighlight)
-
+    // When the button is changed, run the updateChart function
+    d3.select("#selection").on("change", function () {
+        // recover the option that has been chosen
+        const selectedOption = d3.select(this).property("value")
+        // run the updateChart function with this selected option
+        display(selectedOption)
+    })
 
 })
