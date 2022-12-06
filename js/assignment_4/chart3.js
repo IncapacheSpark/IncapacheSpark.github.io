@@ -12,7 +12,7 @@ const svg = d3.select("#ridgeline_chart")
     .append("g")
     .attr("transform", `translate(${margin.left},${margin.top})`);
 
-const colors = {"#3B4CC0", "#B40426"}
+//const colors = {"#3B4CC0", "#B40426"}
 
 const url = "/python/assignment_4_salorno/assignment4.csv";
 
