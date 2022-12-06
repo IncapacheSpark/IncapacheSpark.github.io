@@ -27,7 +27,6 @@ const param = {
     'maximum': 'max_temp'
 }
 
-
 const CENTER_X = 300;
 const CENTER_Y = CENTER_X;
 const MAX_RADIUS = 250;
@@ -45,6 +44,7 @@ ESEMPIO ELEMENTO DI DATA
 */
 
 const url = "/python/assignment_4_salorno/assignment4.csv";
+
 d3.csv(url).then(function (data) {
 
     data.forEach(function (element) {
@@ -55,7 +55,6 @@ d3.csv(url).then(function (data) {
     // List of groups (here I have one group per column)
     const items = ["minimum", "maximum", "average"]
     const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    console.log(data);
 
     // add the options to the button
     d3.select("#selection")
@@ -191,6 +190,14 @@ d3.csv(url).then(function (data) {
 
         /* CREAZIONE LINEE SPEZZATE */
         const sumstat = d3.group(data, d => d.year);    //raggruppo righe per ogni anno
+
+        sumstat.forEach((val, index) => {
+            // console.log(val.length-1)
+            val.push(val[0])
+        })
+        console.log(sumstat)
+
+
         d3.selectAll("path")                            //seleziona elementi path prima di crearli
             .style("stroke", "grey")       //ogni elemento path e' una linea spezzata per un anno di temperature
             .style("opacity", .4)
