@@ -4,8 +4,9 @@ const margin = {top: 10, right: 30, bottom: 30, left: 40},
 
 const svg = d3.select("#radarchart")
     .append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
+    .attr('width', '100%')
+    .attr('viewBox', '0 0 ' + (width + margin.left + margin.right) + ' ' + (height + margin.top + margin.bottom))
+    .attr("preserveAspectRatio", "xMinYMin meet")
     .append("g")
     .attr("transform", `translate(${margin.left},${margin.top})`);
 
@@ -48,12 +49,12 @@ d3.csv(url).then(function (data) {
     const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     console.log(data);
 
-    min_max_domain = [d3.min(data, function (d){
-            return +d.min_temp;
-        }), d3.max(data, function (d) {
-            return +d.max_temp;
-        })];
-    
+    min_max_domain = [d3.min(data, function (d) {
+        return +d.min_temp;
+    }), d3.max(data, function (d) {
+        return +d.max_temp;
+    })];
+
     let radialScale = d3.scaleLinear()
         .domain(min_max_domain)
         .range([0, MAX_RADIUS]);
@@ -64,7 +65,7 @@ d3.csv(url).then(function (data) {
         svg.append("text")
             .attr("x", CENTER_X + 5)
             .attr("y", CENTER_Y - radialScale(t))
-            .text(t.toString()+" °C")
+            .text(t.toString() + " °C")
     );
 
     function angleToCoordinate(angle, value) {
@@ -77,7 +78,7 @@ d3.csv(url).then(function (data) {
     months.forEach((month, index) => {
         let angle = (Math.PI / 2) + (2 * Math.PI * index / months.length);
         let line_coordinate = angleToCoordinate(angle, min_max_domain[1]);      //as object{x: , y:}
-        let label_coordinate = angleToCoordinate(angle, min_max_domain[1] +3);
+        let label_coordinate = angleToCoordinate(angle, min_max_domain[1] + 3);
 
         svg.append("line")     //draw axis line for each month
             .attr("x1", CENTER_X)
@@ -93,13 +94,12 @@ d3.csv(url).then(function (data) {
     })
 
     const tooltip = d3.select("#radarchart")
-            .append("div")
-            .attr("class", "tooltip")
-
+        .append("div")
+        .attr("class", "tooltip")
 
 
     const highlight = function (event, el) {
-        /* 
+
         const min_temp = d3.min(data, function (d) {
             if (d.year === el.toString())
                 return d.min_temp;
@@ -107,36 +107,40 @@ d3.csv(url).then(function (data) {
         const max_temp = d3.max(data, function (d) {
             if (d.year === el.toString())
                 return d.max_temp;
-        })*/
+        })
         const avg_temp = d3.median(data, function (d) {
             if (d.year === el.toString())
                 return d.avg_temp;
         })
         selected_year = el
+
         d3.selectAll("path")
             .style("stroke", "grey")
-            .style("opacity", .4)
-        /*
-        d3.selectAll("circle")
+            .style("opacity", .5)
+
+        d3.selectAll(".circle")
             .style("fill", "grey")
-            .style("opacity", .4)
-           
+            .style("opacity", .5)
+
         d3.selectAll(".obs_circle" + selected_year)
             .style("fill", colors[selected_year])
             .style("opacity", 1)
-        */
+
         d3.selectAll(".y" + selected_year)
             .style("stroke", colors[selected_year])
-            .style("opacity", 1)
-            
+            .style("fill", colors[selected_year])
+            .style("opacity", .5)
+
         d3.selectAll(".domain")
             .style("stroke", "black")
             .style("opacity", 1)
+
         tooltip.transition()
             .duration(200)
             .style("opacity", 1);
-        tooltip.html("<span class='tooltiptext'>" + "Mean temperature: " + avg_temp + " °C" + "<br>" 
-                        + "</span>")
+
+        tooltip.html("<span class='tooltiptext'>" + "Mean temperature: " + avg_temp + " °C" + "<br>"
+            + "</span>")
             .style("left", (event.pageX) + "px")
             .style("top", (event.pageY - 28) + "px");
 
@@ -145,16 +149,13 @@ d3.csv(url).then(function (data) {
     const doNotHighlight = function () {
         d3.selectAll("path")
             .style("stroke", d => colors[d])
+            .style("fill", "none")
             .style("opacity", 1);
-        /*
-        d3.selectAll("circle")
-            .style("stroke", d => colors[d])
-            .style("opacity", 1);
-        
-        d3.selectAll(".observation_circle")
+
+        d3.selectAll(".circle")
             .style("fill", d => colors[d.year])
             .style("opacity", 1);
-        */
+
         tooltip
             .transition()
             .duration(100)
@@ -167,6 +168,7 @@ d3.csv(url).then(function (data) {
     d3.selectAll("path")                            //seleziona elementi path prima di crearli
         .style("stroke", "grey")       //ogni elemento path e' una linea spezzata per un anno di temperature
         .style("opacity", .4)
+
     svg.selectAll(".line")
         .data(sumstat)
         .join("path")
@@ -178,10 +180,10 @@ d3.csv(url).then(function (data) {
             return colors[d[0]]
         })
         .attr("stroke-width", 1.5)
-        .attr("d", function (d) {           //lista di coordinate del cammino
+        .attr("d", function (d) {//lista di coordinate del cammino
             return d3.line()
                 .x(function (d) {
-                    let index = +d.month -1// lui fa -1   
+                    let index = +d.month - 1// lui fa -1
                     let angle = (Math.PI / 2) + (2 * Math.PI * index / months.length);
                     let value = d.avg_temp;
                     let coords = angleToCoordinate(angle, value);      //as object{x: , y:}
@@ -189,7 +191,7 @@ d3.csv(url).then(function (data) {
                     //return x(months[+d.month - 1]);  //vecchia versione
                 })
                 .y(function (d) {
-                    let index = +d.month -1 // lui fa -1   
+                    let index = +d.month - 1 // lui fa -1
                     let angle = (Math.PI / 2) + (2 * Math.PI * index / months.length);
                     let value = d.avg_temp;
                     let coords = angleToCoordinate(angle, value);      //as object{x: , y:}
@@ -197,35 +199,35 @@ d3.csv(url).then(function (data) {
                     //return y(+d.max_temp);
                 })
                 (d[1])
-        })  
+        })
 
     /* CIRCONFERENZE CONCENTRICHE */
     ticks.forEach(t =>                  //LE circonfrenze concentriche intersecano i tick
-    svg.append("circle")
-        .attr("cx", CENTER_X)
-        .attr("cy", CENTER_Y)
-        .attr("fill", "none")
-        .attr("stroke", "gray")
-        .attr("r", radialScale(t))
-        .attr("class", "concentric_circle")
+        svg.append("circle")
+            .attr("cx", CENTER_X)
+            .attr("cy", CENTER_Y)
+            .attr("fill", "none")
+            .attr("stroke", "gray")
+            .attr("r", radialScale(t))
+            .attr("class", "concentric_circle")
     );
-    /* CERCHI CON OSSERVAZIONI SU OGNI MESE */
-    /*
+
+    // CERCHI CON OSSERVAZIONI SU OGNI MESE
     svg.selectAll("mycircle")
         .data(data)
         .join("circle")            //il nome dell'elemento svg
-        .attr("class", function(d){
-            return "obs_circle"+d.year;
+        .attr("class", function (d) {
+            return "obs_circle" + d.year + " circle";
         })
         .attr("cx", function (d) {
-            let index = +d.month -1  
+            let index = +d.month - 1
             let angle = (Math.PI / 2) + (2 * Math.PI * index / months.length);
             let value = d.avg_temp;
             let coords = angleToCoordinate(angle, value);      //as object{x: , y:}
             return coords.x
         })
         .attr("cy", function (d) {
-            let index = +d.month  -1
+            let index = +d.month - 1
             let angle = (Math.PI / 2) + (2 * Math.PI * index / months.length);
             let value = d.avg_temp;
             let coords = angleToCoordinate(angle, value);      //as object{x: , y:}
@@ -235,9 +237,7 @@ d3.csv(url).then(function (data) {
         .style("fill", function (d) {
             return colors[d.year]
         });
-        */
-        
-        
+
 
     /*LEGENDA CHE ILLUSTRA IL COLORE */
     const size = 20
@@ -247,8 +247,8 @@ d3.csv(url).then(function (data) {
         .join("rect")
         .attr("x", 645)
         .attr("y", (d, i) => 10 + i * (size + 6)) // 100 is where the first dot appears. 25 is the distance between dots
-        .attr("width", 30)
-        .attr('height', 15)
+        .attr("width", 18)
+        .attr('height', 5)
         .style("fill", d => colors[d])
         .on("mouseover", highlight)
         .on("mouseleave", doNotHighlight)
@@ -268,47 +268,3 @@ d3.csv(url).then(function (data) {
 
 
 })
-
-
-
-
-
-
-
-
-
-
-/* d3.line generatore di linee
-
-    let line = d3.line()
-        .x(d => console.log(d))
-        .y(d => d.avg_temp)
-        .context(null);
-
-    let colors = ["darkorange", "gray", "navy"];
-
-    function getPathCoordinates(data_point) {
-        let coordinates = [];
-        months.forEach((month, index) => {
-            let angle = (Math.PI / 2) + (2 * Math.PI * index / months.length);
-            coordinates.push(angleToCoordinate(angle, data_point[month]));
-        })
-        return coordinates;
-    }
-
-    data.forEach((el, index) => {
-        let color = colors[index];
-        let coordinates = getPathCoordinates(el);
-
-        //draw the path element
-        svg.append("path")
-            .datum(coordinates)
-            .attr("d", line)
-            .attr("stroke-width", 3)
-            .attr("stroke", color)
-            .attr("fill", color)
-            .attr("stroke-opacity", 1)
-            .attr("opacity", 0.5);
-    })
-
-*/
