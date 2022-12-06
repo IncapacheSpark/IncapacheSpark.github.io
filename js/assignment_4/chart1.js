@@ -1,5 +1,5 @@
 // set the dimensions and margins of the graph
-const margin = {top: 10, right: 30, bottom: 30, left: 40},
+const margin = {top: 10, right: 70, bottom: 30, left: 40},
     width = 750 - margin.left - margin.right,
     height = 450 - margin.top - margin.bottom;
 
@@ -49,15 +49,26 @@ d3.csv("https://raw.githubusercontent.com/IncapacheSpark/IncapacheSpark.github.i
             .call(d3.axisLeft(y).scale(y).tickFormat((d) => d + "°C"));
 
         // color palette
-        const colors = {
-            '1993': '#cf0202',
-            '1997': '#cfa602',
-            '2001': '#0bb502',
-            '2005': '#039687',
-            '2009': '#032096',
+        const min_colors = {
+            '1993': '#9b0303',
+            '1997': '#a68502',
+            '2001': '#044801',
+            '2005': '#02786c',
+            '2009': '#031d87',
             '2013': '#4a02b0',
-            '2017': '#b00293',
-            '2021': '#333233'
+            '2017': '#730160',
+            '2021': '#b3440d'
+        }
+
+        const max_colors = {
+            '1993': '#d06767',
+            '1997': '#b89d35',
+            '2001': '#507f4d',
+            '2005': '#67aea7',
+            '2009': '#6878b7',
+            '2013': '#6a4c93',
+            '2017': '#c059b0',
+            '2021': '#c26a3d'
         }
 
         // create a tooltip
@@ -94,11 +105,15 @@ d3.csv("https://raw.githubusercontent.com/IncapacheSpark/IncapacheSpark.github.i
                 .style("opacity", .4)
 
             d3.selectAll(".c" + selected_year)
-                .style("fill", colors[selected_year])
+                .style("fill", min_colors[selected_year])
                 .style("opacity", 1)
 
-            d3.selectAll(".y" + selected_year)
-                .style("stroke", colors[selected_year])
+            d3.selectAll(".y_max" + selected_year)
+                .style("stroke", max_colors[selected_year])
+                .style("opacity", 1)
+
+            d3.selectAll(".y_min" + selected_year)
+                .style("stroke", min_colors[selected_year])
                 .style("opacity", 1)
 
             d3.selectAll(".domain")
@@ -109,7 +124,7 @@ d3.csv("https://raw.githubusercontent.com/IncapacheSpark/IncapacheSpark.github.i
                 .duration(200)
                 .style("opacity", 1);
 
-            tooltip.html("<span class='tooltiptext'>" + "Min temperature: " + min_temp + " °C" + "<br>"
+            tooltip.html("<span class='tooltiptext'>" + "<b>Year: </b>" + selected_year + "<br>" + "Min temperature: " + min_temp + " °C" + "<br>"
                 + "Max temperature: " + max_temp + " °C" + "<br>"
                 + "Mean temperature: " + avg_temp + " °C" + "<br>" + "</span>")
                 .style("left", (event.pageX) + "px")
@@ -120,11 +135,11 @@ d3.csv("https://raw.githubusercontent.com/IncapacheSpark/IncapacheSpark.github.i
         // Highlight the specie that is hovered
         const doNotHighlight = function () {
             d3.selectAll("path")
-                .style("stroke", d => colors[d])
+                .style("stroke", d => max_colors[d])
                 .style("opacity", 1)
 
             d3.selectAll("circle")
-                .style("fill", d => colors[d.year])
+                .style("fill", d => min_colors[d.year])
                 .style("opacity", 1)
 
             tooltip
@@ -139,11 +154,11 @@ d3.csv("https://raw.githubusercontent.com/IncapacheSpark/IncapacheSpark.github.i
             .data(sumstat)
             .join("path")
             .attr("class", function (d) {
-                return "y" + d[0]
+                return "y_max" + d[0]
             })
             .attr("fill", "none")
             .attr("stroke", function (d) {
-                return colors[d[0]]
+                return max_colors[d[0]]
             })
             .attr("stroke-width", 1.5)
             .attr("d", function (d) {
@@ -162,11 +177,11 @@ d3.csv("https://raw.githubusercontent.com/IncapacheSpark/IncapacheSpark.github.i
             .data(sumstat)
             .join("path")
             .attr("class", function (d) {
-                return "y" + d[0]
+                return "y_min" + d[0]
             })
             .attr("fill", "none")
             .attr("stroke", function (d) {
-                return colors[d[0]]
+                return min_colors[d[0]]
             })
             .attr("stroke-width", 1.5)
             .attr("d", function (d) {
@@ -194,7 +209,7 @@ d3.csv("https://raw.githubusercontent.com/IncapacheSpark/IncapacheSpark.github.i
             })
             .attr("r", 3)
             .style("fill", function (d) {
-                return colors[d.year]
+                return min_colors[d.year]
             })
 
         // Add one line in the legend for each year.
@@ -207,7 +222,18 @@ d3.csv("https://raw.githubusercontent.com/IncapacheSpark/IncapacheSpark.github.i
             .attr("y", (d, i) => 10 + i * (size + 6)) // 100 is where the first dot appears. 25 is the distance between dots
             .attr("width", 18)
             .attr('height', 5)
-            .style("fill", d => colors[d])
+            .style("fill", d => max_colors[d])
+            .on("mouseover", highlight)
+            .on("mouseleave", doNotHighlight)
+
+        svg.selectAll("myrect")
+            .data(years)
+            .join("rect")
+            .attr("x", 645)
+            .attr("y", (d, i) => 20 + i * (size + 6)) // 100 is where the first dot appears. 25 is the distance between dots
+            .attr("width", 18)
+            .attr('height', 5)
+            .style("fill", d => min_colors[d])
             .on("mouseover", highlight)
             .on("mouseleave", doNotHighlight)
 
@@ -217,8 +243,8 @@ d3.csv("https://raw.githubusercontent.com/IncapacheSpark/IncapacheSpark.github.i
             .enter()
             .append("text")
             .attr("x", 655 + size * .8)
-            .attr("y", (d, i) => i * (size + 6) + (size / 2)) // 100 is where the first dot appears. 25 is the distance between dots
-            .style("fill", d => colors[d])
+            .attr("y", (d, i) => i * (size + 6) + 15) // 100 is where the first dot appears. 25 is the distance between dots
+            .style("fill", d => min_colors[d])
             .text(d => d)
             .attr("text-anchor", "left")
             .style("alignment-baseline", "middle")
