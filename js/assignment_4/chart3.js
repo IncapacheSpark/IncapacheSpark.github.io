@@ -1,5 +1,3 @@
-//const color = ['#ff595e', '#ffca3a', '#8ac926', '#1982c4', '#6a4c93', '#ced4da']
-
 const margin = {top: 50, right: 30, bottom: 30, left: 40},
     width = 750 - margin.left - margin.right,
     height = 650 - margin.top - margin.bottom;
@@ -11,8 +9,6 @@ const svg = d3.select("#ridgeline_chart")
     .attr("preserveAspectRatio", "xMinYMin meet")
     .append("g")
     .attr("transform", `translate(${margin.left},${margin.top})`);
-
-//const colors = {"#3B4CC0", "#B40426"}
 
 const url_min_temps = "/python/data/ass_4_ridgeline_min.csv";
 const url_max_temps = "/python/data/ass_4_ridgeline_max.csv";
@@ -26,10 +22,6 @@ Promise.all([
   let min_temps = initialize[0];
   let max_temps = initialize[1];
 
-
-//d3.csv(url).then(function(data) {
-
-  
   const items_years = ["1993", "1997", "2001", "2005", "2009", "2013", "2017", "2021"];
   const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
@@ -46,7 +38,6 @@ Promise.all([
           return d;
       }) // corresponding value returned by the button
 
-
   function display_year_filtered(selected_year=items_years[0]){
     const categories = months;
     const n = categories.length;
@@ -60,7 +51,7 @@ Promise.all([
 
     // Filtering on selected year and removing none values (the latter is not working...)
     min_temps.forEach((d) => {
-      
+
       console.log(d);
 
       var data_properties = Object.keys(d).slice(1);
@@ -110,7 +101,7 @@ Promise.all([
       .call(d3.axisLeft(yName));
 
     // MIN TEMPS VALUE
-    
+
     // Compute kernel density estimation for each column:
     const kde = kernelDensityEstimator(kernelEpanechnikov(7), x.ticks(40)) // increase this 40 for more accurate density.
     const allDensity = []
@@ -126,7 +117,7 @@ Promise.all([
       .join("path")
         .attr("transform", function(d){return(`translate(0, ${(yName(d.key)-height)})`)})
         .datum(function(d){return(d.density)})
-        .attr("fill", " #0000FF")
+        .attr("fill", " #2ab7ca")
         .attr("opacity", 0.7)
         .attr("stroke", "#000")
         .attr("stroke-width", 0.1)
@@ -135,10 +126,10 @@ Promise.all([
             .x(function(d) { return x(d[0]); })
             .y(function(d) { return y(d[1]); })
         )
-        
+
 
     // MAX TEMPS VALUE
-    
+
     // Compute kernel density estimation for each column:
     const kde_max = kernelDensityEstimator(kernelEpanechnikov(7), x.ticks(40)) // increase this 40 for more accurate density.
     const allDensity_max = []
@@ -154,7 +145,7 @@ Promise.all([
       .join("path")
         .attr("transform", function(d){return(`translate(0, ${(yName(d.key)-height)})`)})
         .datum(function(d){return(d.density)})
-        .attr("fill", "#FF0000")
+        .attr("fill", "#fe4a49")
         .attr("opacity", 0.7)
         .attr("stroke", "#000")
         .attr("stroke-width", 0.1)
@@ -170,7 +161,7 @@ Promise.all([
 
   // When the button is changed, run the updateChart function
   d3.select("#selection").on("change", function () {
-    
+
     d3.selectAll("path").remove();
     // recover the option that has been chosen
     const selectedYearOption = d3.select(this).property("value")
