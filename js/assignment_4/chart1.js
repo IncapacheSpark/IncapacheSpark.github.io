@@ -79,19 +79,18 @@ d3.csv("https://raw.githubusercontent.com/IncapacheSpark/IncapacheSpark.github.i
         // Highlight the specie that is hovered
         const highlight = function (event, el) {
 
-            const min_temp = d3.min(data, function (d) {
-                if (d.year === el.toString())
-                    return d.min_temp;
+            const highlight_data = data.filter(d => d.year === el.toString())
+
+            const min_temp = d3.min(highlight_data, function (d) {
+                return +d.min_temp;
             })
 
-            const max_temp = d3.max(data, function (d) {
-                if (d.year === el.toString())
-                    return d.max_temp;
+            const max_temp = d3.max(highlight_data, function (d) {
+                return +d.max_temp;
             })
 
-            const avg_temp = d3.median(data, function (d) {
-                if (d.year === el.toString())
-                    return d.avg_temp;
+            const avg_temp = d3.median(highlight_data, function (d) {
+                return +d.avg_temp;
             })
 
             selected_year = el
