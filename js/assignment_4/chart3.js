@@ -46,36 +46,41 @@ Promise.all([
     var filtered_min_data = [];
     var filtered_max_data = [];
 
-    var has_nones_min = false;
-    var has_nones_max = false;
-
     // Filtering on selected year and removing none values (the latter is not working...)
     min_temps.forEach((d) => {
+      var has_nones_min = false;
+      var data_properties = Object.keys(d).slice(2);
 
-      console.log(d);
+      if(d.year == selected_year){
+        data_properties.forEach((p) => {
+            if (d[p] == 'None'){
+              has_nones_min = true;
+            }
+        });
 
-      var data_properties = Object.keys(d).slice(1);
-      data_properties.forEach((p) => {
-        if (d[p] == 'None'){
-          has_nones_min = true;
+        if(!has_nones_min){
+          filtered_min_data.push(d);
         }
-      });
-      if(!has_nones_min && d.year == selected_year){
-        filtered_min_data.push(d);
       }
     });
 
     max_temps.forEach((d) => {
-      var data_properties = Object.keys(d).slice(1);
-      data_properties.forEach((p) => {
-        if (d[p] == 'None'){
-          has_nones_max = true;
+      var has_nones_max = false;
+      var data_properties = Object.keys(d).slice(2);
+
+      if(d.year == selected_year){
+        data_properties.forEach((p) => {
+            if (d[p] == 'None'){
+              has_nones_max = true;
+            }
+        });
+
+        if(!has_nones_max){
+          filtered_max_data.push(d);
         }
-      });
-      if(!has_nones_max && d.year == selected_year){
-        filtered_max_data.push(d);
       }
     });
+
 
     console.log('final len di filtered data is', filtered_min_data.length, filtered_max_data.length);
 
