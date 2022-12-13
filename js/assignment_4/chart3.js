@@ -87,7 +87,7 @@ Promise.all([
 
     // Add X axis
     const x = d3.scaleLinear()
-      .domain([-35, 50])
+      .domain([-20, 45])
       .range([ 0, width ]);
     svg.append("g")
       .attr("transform", `translate(0, ${height})`)
