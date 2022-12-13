@@ -23,7 +23,7 @@ Promise.all([
   let max_temps = initialize[1];
 
   const items_years = ["1993", "1997", "2001", "2005", "2009", "2013", "2017", "2021"];
-  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"];
 
   // add the options to the button
   d3.select("#selection")
@@ -48,6 +48,7 @@ Promise.all([
 
     // Filtering on selected year and removing none values (the latter is not working...)
     min_temps.forEach((d) => {
+      console.log(d);
       var has_nones_min = false;
       var data_properties = Object.keys(d).slice(2);
 
@@ -86,7 +87,7 @@ Promise.all([
 
     // Add X axis
     const x = d3.scaleLinear()
-      .domain([-30, 35])
+      .domain([-35, 50])
       .range([ 0, width ]);
     svg.append("g")
       .attr("transform", `translate(0, ${height})`)
@@ -110,6 +111,7 @@ Promise.all([
     // Compute kernel density estimation for each column:
     const kde = kernelDensityEstimator(kernelEpanechnikov(7), x.ticks(40)) // increase this 40 for more accurate density.
     const allDensity = []
+    console.log(filtered_min_data);
     for (i = 0; i < n; i++) {
         key = categories[i]
         density = kde( filtered_min_data.map(function(d){  return d[key]; }) )
