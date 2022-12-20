@@ -23,9 +23,24 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" rel="stylesheet" type='text/css'>
 
     <title>Assignment 5</title>
+    <style>
+      body {
+        background: #BEBEBE	;
+        overflow: hidden;
+      }
+      .snowflake {
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        background: linear-gradient(white, white); /* Workaround for Chromium's selective color inversion */
+        border-radius: 50%;
+        filter: drop-shadow(0 0 10px white);
+      }
+    </style>
+    <script src="/js/PureSnow.js"></script>
 </head>
-
 <body>
+<div id="snow"></div>
 
 <!-- ################################# NAVBAR #################################### -->
 <nav class="navbar navbar-default background-color navbar-fixed-top">
@@ -58,9 +73,9 @@
 
 <!-- ################################# CONTAINER #################################### -->
 <div class="container center">
-
     <section class="margin-title-section">
         <h1 class="title center">Assignment 5: Flux</h1>
+        <h2 class="title center">Buone Feste ❄</h2>
         <hr>
         <h2 class="subtitle left">
           The 5th assignment concerns ...
@@ -94,6 +109,7 @@
     </div>
 
 </div> <!-- chiude container -->
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 
 <!-- ################################# FOOTER #################################### -->
 <footer class="text-center text-lg-start">
