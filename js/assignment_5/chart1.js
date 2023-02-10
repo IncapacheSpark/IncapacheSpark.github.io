@@ -1,7 +1,7 @@
 // set the dimensions and margins of the graph
 var margin = {top: 10, right: 10, bottom: 10, left: 10},
-    width = 650 - margin.left - margin.right,
-    height = 680 - margin.top - margin.bottom;
+    width = 450 - margin.left - margin.right,
+    height = 480 - margin.top - margin.bottom;
 
 // append the svg object to the body of the page
 var svg = d3.select("#my_dataviz").append("svg")
@@ -17,13 +17,13 @@ var color = d3.scaleOrdinal(d3.schemeCategory20);
 // Set the sankey diagram properties
 var sankey = d3.sankey()
     .nodeWidth(36)
-    .nodePadding(10)
+    .nodePadding(290)
     .size([width, height]);
 
 // load the data
-url = "/python/assignment_5/ass_5_sankey_normalized.json";
-d3.json(url, function(error, graph) {
-  console.log(graph);
+url = 'python/assignment_5/ass_5_sankey.json';
+d3.json("url", function(error, graph) {
+
   // Constructs a new Sankey generator with the default settings.
   sankey
       .nodes(graph.nodes)
