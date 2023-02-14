@@ -53,102 +53,102 @@
     {
       "source": 0,
       "target": 1,
-      "value": 36849.8
+      "value": 1
     },
     {
       "source": 0,
       "target": 2,
-      "value": 438610.9
+      "value": 1.047327
     },
     {
       "source": 0,
       "target": 3,
-      "value": 62980.1
+      "value": 1.003078
     },
     {
       "source": 0,
       "target": 4,
-      "value": 70736.5
+      "value": 1.003992
     },
     {
       "source": 0,
       "target": 5,
-      "value": 198211
+      "value": 1.019008
     },
     {
       "source": 0,
       "target": 6,
-      "value": 1083313.4
+      "value": 1.123273
     },
     {
       "source": 0,
       "target": 7,
-      "value": 80562.6
+      "value": 1.005149
     },
     {
       "source": 0,
       "target": 8,
-      "value": 65967.6
+      "value": 1.00343
     },
     {
       "source": 0,
       "target": 9,
-      "value": 406394.2
+      "value": 1.043532
     },
     {
       "source": 0,
       "target": 10,
-      "value": 8525849.3
+      "value": 2
     },
     {
       "source": 1,
       "target": 11,
-      "value": 55663.7
+      "value": 1
     },
     {
       "source": 2,
       "target": 11,
-      "value": 461946.2
+      "value": 1.047864
     },
     {
       "source": 3,
       "target": 11,
-      "value": 111893.4
+      "value": 1.006624
     },
     {
       "source": 4,
       "target": 11,
-      "value": 372904.4
+      "value": 1.037374
     },
     {
       "source": 5,
       "target": 11,
-      "value": 174838.5
+      "value": 1.01404
     },
     {
       "source": 6,
       "target": 11,
-      "value": 621852.6
+      "value": 1.066702
     },
     {
       "source": 7,
       "target": 11,
-      "value": 123680.8
+      "value": 1.008013
     },
     {
       "source": 8,
       "target": 11,
-      "value": 131748.9
+      "value": 1.008964
     },
     {
       "source": 9,
       "target": 11,
-      "value": 370957.3
+      "value": 1.037144
     },
     {
       "source": 10,
       "target": 11,
-      "value": 8543989.4
+      "value": 2
     }
   ]
 }

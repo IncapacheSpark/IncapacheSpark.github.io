@@ -21,6 +21,16 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" rel="stylesheet" type='text/css'>
   <title>Sankey Alluvial</title>
+  <style>
+    .link {
+      fill: none;
+      stroke: #000;
+      stroke-opacity: .2;
+    }
+    .link:hover {
+      stroke-opacity: .5;
+    }
+    </style>
 </head>
 <body>
 
@@ -55,13 +65,16 @@
 </nav>
 
 <div class="container center">
-  <h1 class="title margin-title-section">Titolo</h1>
+  <h1 class="title margin-title-section">The Carbon Storage Capacity of Top Tree Species and Their Economic Impact</h1>
   <hr>
   <h2 class="subtitle left">
-    ... testo ...
+    A Sankey alluvial diagram is a type of flow diagram that visualizes the flow of carbon storage from the top 10 species of trees to the total euro saved.
+    This diagram allows us to see the relationship between the carbon storage of different tree species and the resulting economic benefits.
+    The thickness of the bands in the diagram represents the magnitude of the carbon storage or savings, making it easy to compare the relative importance of each tree species.
+    By using this visual representation, we can easily understand the impact of different tree species on carbon storage and the resulting economic benefits.
   </h2>
   <hr>
-    <div id="linechart" class="font svg-container"> </div>
+    <div id="my_dataviz" class="font svg-container"> </div>
 </div>
 
 <!-- ################################# FOOTER #################################### -->
@@ -74,7 +87,8 @@
 </footer>
 
 <!-- Load d3.js -->
-<script src="https://d3js.org/d3.v6.min.js"></script>
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/holtzy/D3-graph-gallery@master/LIB/sankey.js"></script>
 <script src="/js/assignment_5/chart1.js"></script>
 </body>
 
